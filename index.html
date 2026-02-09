@@ -522,16 +522,16 @@
                 <input type="text" class="form-input" id="gelatoCreePar" placeholder="Votre nom">
             </div>
             <div class="form-group">
-                <label class="form-label">Date de production</label>
-                <input type="date" class="form-input" id="gelatoProduction">
+                <label class="form-label">📅 Date de production *</label>
+                <input type="date" class="form-input" id="gelatoProduction" required>
             </div>
             <div class="form-group">
-                <label class="form-label">Date au comptoir</label>
+                <label class="form-label">🏪 Date au comptoir (optionnel)</label>
                 <input type="date" class="form-input" id="gelatoComptoir">
             </div>
             <div class="form-group">
-                <label class="form-label">Date de péremption</label>
-                <input type="date" class="form-input" id="gelatoPeremption">
+                <label class="form-label">⚠️ Date de péremption (7 jours après comptoir)</label>
+                <input type="date" class="form-input" id="gelatoPeremption" readonly style="background-color: #f0f0f0;">
             </div>
             <div class="popup-actions">
                 <button class="btn-save" id="saveGelatoBtn">✓ Sauvegarder</button>
@@ -836,15 +836,26 @@ function renderGelatos() {
     }
     
     container.innerHTML = state.gelatos.map(gelato => {
-        const daysLeft = daysBetween(new Date().toISOString().split('T')[0], gelato.date_peremption);
-        const urgency = daysLeft <= 2 ? 'urgent' : daysLeft <= 5 ? 'warning' : 'ok';
+        // Si pas de date de péremption, pas d'urgence
+        let urgency = 'ok';
+        let peremptionText = '';
+        
+        if (gelato.date_peremption) {
+            const daysLeft = daysBetween(new Date().toISOString().split('T')[0], gelato.date_peremption);
+            urgency = daysLeft <= 2 ? 'urgent' : daysLeft <= 5 ? 'warning' : 'ok';
+            peremptionText = `<div class="gelato-peremption ${urgency}">⚠️ Péremption: ${formatDate(gelato.date_peremption)} (${daysLeft} jour${daysLeft > 1 ? 's' : ''})</div>`;
+        } else if (!gelato.date_comptoir) {
+            peremptionText = `<div class="gelato-peremption ok" style="background: #e3f2fd; color: #1976d2;">📦 En attente de mise au comptoir</div>`;
+        }
+        
+        const comptoirText = gelato.date_comptoir ? formatDate(gelato.date_comptoir) : 'Pas encore';
         
         return `
             <div class="gelato-card ${urgency}">
                 <div class="gelato-name">${gelato.nom}</div>
                 <div class="gelato-info">Créé par: ${gelato.cree_par}</div>
-                <div class="gelato-dates">📅 Production: ${formatDate(gelato.date_production)} | Comptoir: ${formatDate(gelato.date_comptoir)}</div>
-                <div class="gelato-peremption ${urgency}">⚠️ Péremption: ${formatDate(gelato.date_peremption)} (${daysLeft} jour${daysLeft > 1 ? 's' : ''})</div>
+                <div class="gelato-dates">📅 Production: ${formatDate(gelato.date_production)} | Comptoir: ${comptoirText}</div>
+                ${peremptionText}
                 <div class="gelato-actions">
                     <button class="btn-edit" onclick="window.editGelato(${gelato.id})">✏️ Modifier</button>
                     <button class="btn-delete" onclick="window.deleteGelato(${gelato.id})">🗑️ Supprimer</button>
@@ -860,15 +871,27 @@ function openGelatoPopup() {
     document.getElementById('gelatoCreePar').value = '';
     
     const today = new Date().toISOString().split('T')[0];
-    const weekLater = new Date();
-    weekLater.setDate(weekLater.getDate() + 7);
     
     document.getElementById('gelatoProduction').value = today;
-    document.getElementById('gelatoComptoir').value = today;
-    document.getElementById('gelatoPeremption').value = weekLater.toISOString().split('T')[0];
+    document.getElementById('gelatoComptoir').value = '';
+    document.getElementById('gelatoPeremption').value = '';
     
     state.currentEditGelato = null;
     document.getElementById('gelatoPopup').classList.add('active');
+    
+    // Ajouter le listener pour calculer la péremption automatiquement
+    const comptoirInput = document.getElementById('gelatoComptoir');
+    const peremptionInput = document.getElementById('gelatoPeremption');
+    
+    comptoirInput.onchange = function() {
+        if (this.value) {
+            const dateComptoir = new Date(this.value);
+            dateComptoir.setDate(dateComptoir.getDate() + 7);
+            peremptionInput.value = dateComptoir.toISOString().split('T')[0];
+        } else {
+            peremptionInput.value = '';
+        }
+    };
 }
 
 function editGelato(id) {
@@ -879,22 +902,36 @@ function editGelato(id) {
     document.getElementById('gelatoNom').value = gelato.nom;
     document.getElementById('gelatoCreePar').value = gelato.cree_par;
     document.getElementById('gelatoProduction').value = gelato.date_production;
-    document.getElementById('gelatoComptoir').value = gelato.date_comptoir;
-    document.getElementById('gelatoPeremption').value = gelato.date_peremption;
+    document.getElementById('gelatoComptoir').value = gelato.date_comptoir || '';
+    document.getElementById('gelatoPeremption').value = gelato.date_peremption || '';
     
     state.currentEditGelato = id;
     document.getElementById('gelatoPopup').classList.add('active');
+    
+    // Ajouter le listener pour calculer la péremption automatiquement
+    const comptoirInput = document.getElementById('gelatoComptoir');
+    const peremptionInput = document.getElementById('gelatoPeremption');
+    
+    comptoirInput.onchange = function() {
+        if (this.value) {
+            const dateComptoir = new Date(this.value);
+            dateComptoir.setDate(dateComptoir.getDate() + 7);
+            peremptionInput.value = dateComptoir.toISOString().split('T')[0];
+        } else {
+            peremptionInput.value = '';
+        }
+    };
 }
 
 async function saveGelato() {
     const nom = document.getElementById('gelatoNom').value.trim();
     const cree_par = document.getElementById('gelatoCreePar').value.trim();
     const date_production = document.getElementById('gelatoProduction').value;
-    const date_comptoir = document.getElementById('gelatoComptoir').value;
-    const date_peremption = document.getElementById('gelatoPeremption').value;
+    const date_comptoir = document.getElementById('gelatoComptoir').value || null;
+    const date_peremption = document.getElementById('gelatoPeremption').value || null;
     
-    if (!nom || !cree_par || !date_production || !date_comptoir || !date_peremption) {
-        showNotification('Veuillez remplir tous les champs', true);
+    if (!nom || !cree_par || !date_production) {
+        showNotification('Veuillez remplir les champs obligatoires (nom, créé par, date production)', true);
         return;
     }
     
@@ -1051,6 +1088,55 @@ function setupRealtimeSubscriptions() {
         .subscribe();
 }
 
+async function resetDailyTasks() {
+    try {
+        // Réinitialiser toutes les tâches d'ouverture
+        const { error: errorOuverture } = await supabase
+            .from('taches_ouverture')
+            .update({ completed: false })
+            .neq('id', 0); // Met à jour toutes les lignes
+        
+        if (errorOuverture) throw errorOuverture;
+        
+        // Réinitialiser toutes les tâches de fermeture
+        const { error: errorFermeture } = await supabase
+            .from('taches_fermeture')
+            .update({ completed: false })
+            .neq('id', 0); // Met à jour toutes les lignes
+        
+        if (errorFermeture) throw errorFermeture;
+        
+        // Recharger les listes
+        await loadTasks('taches_ouverture', 'tachesOuverture');
+        await loadTasks('taches_fermeture', 'tachesFermeture');
+        
+        console.log('✓ Tâches quotidiennes réinitialisées à 4h00 AM');
+    } catch (error) {
+        console.error('Erreur lors du reset des tâches:', error);
+    }
+}
+
+function setupDailyReset() {
+    // Fonction pour vérifier et exécuter le reset
+    function checkAndReset() {
+        const now = new Date();
+        const lastReset = localStorage.getItem('lastDailyReset');
+        const today = now.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        
+        // Si on n'a jamais fait de reset ou si c'est un nouveau jour et qu'il est au moins 4h00
+        if (!lastReset || (lastReset !== today && now.getHours() >= 4)) {
+            resetDailyTasks();
+            localStorage.setItem('lastDailyReset', today);
+        }
+    }
+    
+    // Vérifier immédiatement au chargement
+    checkAndReset();
+    
+    // Vérifier toutes les 5 minutes si on doit faire le reset
+    setInterval(checkAndReset, 5 * 60 * 1000); // 5 minutes
+}
+
 async function init() {
     updateSyncStatus('Chargement...', false);
     
@@ -1064,6 +1150,7 @@ async function init() {
     
     updateWeekDisplay();
     setupRealtimeSubscriptions();
+    setupDailyReset(); // Active le reset automatique à 4h00 AM
     
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(tab.dataset.tab));
