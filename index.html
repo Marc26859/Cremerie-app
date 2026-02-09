@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Bar Laitier">
+    <title>Bar Laitier - Synchronisé</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #F5F5FA;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4F6BED 0%, #5B7EFF 100%);
+            padding: 15px 20px;
+            padding-top: max(15px, env(safe-area-inset-top));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .app-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .sync-status {
+            font-size: 10px;
+            color: rgba(255,255,255,0.8);
+            margin-top: 2px;
+        }
+
+        .sync-status.synced {
+            color: #2ecc71;
+        }
+
+        .supervisor-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .supervisor-btn.active {
+            background: #2ecc71;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 60px;
+            z-index: 99;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 75px;
+            text-align: center;
+            padding: 12px 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            font-size: 11px;
+            background: white;
+        }
+
+        .tab.active {
+            background: #4F6BED;
+            color: white;
+            border-bottom-color: #4F6BED;
+        }
+
+        .tab-icon {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .content {
+            padding: 15px;
+            padding-bottom: 80px;
+            min-height: calc(100vh - 140px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+
+        .add-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+            transition: all 0.3s;
+        }
+
+        .add-btn:active {
+            transform: scale(0.98);
+        }
+
+        .gelato-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #95a5a6;
+            transition: all 0.3s;
+        }
+
+        .gelato-card.urgent {
+            border-left-color: #e74c3c;
+        }
+
+        .gelato-card.warning {
+            border-left-color: #f1c40f;
+        }
+
+        .gelato-card.ok {
+            border-left-color: #27ae60;
+        }
+
+        .gelato-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #34495e;
+            margin-bottom: 8px;
+        }
+
+        .gelato-info {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .gelato-dates {
+            font-size: 11px;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+
+        .gelato-peremption {
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            padding: 5px 8px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .gelato-peremption.urgent {
+            background: #ffebee;
+            color: #e74c3c;
+        }
+
+        .gelato-peremption.warning {
+            background: #fff9e6;
+            color: #f39c12;
+        }
+
+        .gelato-peremption.ok {
+            background: #e8f5e9;
+            color: #27ae60;
+        }
+
+        .gelato-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-edit, .btn-delete {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #3498db;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+        }
+
+        .btn-edit:active, .btn-delete:active {
+            transform: scale(0.95);
+        }
+
+        .task-item {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #2ecc71;
+            flex-shrink: 0;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 14px;
+            color: #34495e;
+        }
+
+        .task-text.completed {
+            text-decoration: line-through;
+            color: #95a5a6;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .popup {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .popup-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4F6BED;
+        }
+
+        .popup-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-save, .btn-cancel {
+            flex: 1;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-save {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #bdc3c7;
+            color: #34495e;
+        }
+
+        .notification {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ecc71;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .notification.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .code-popup {
+            text-align: center;
+        }
+
+        .code-input {
+            font-size: 24px;
+            letter-spacing: 10px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .week-display {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .week-display strong {
+            color: #4F6BED;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <div class="app-title">🍦 Bar Laitier</div>
+            <div class="sync-status" id="syncStatus">Synchronisation...</div>
+        </div>
+        <button class="supervisor-btn" id="supervisorBtn">👤 Employé</button>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="ouverture">
+            <span class="tab-icon">☀️</span>
+            Ouverture
+        </div>
+        <div class="tab" data-tab="fermeture">
+            <span class="tab-icon">🌙</span>
+            Fermeture
+        </div>
+        <div class="tab" data-tab="inventaire">
+            <span class="tab-icon">🍦</span>
+            Inventaire
+        </div>
+        <div class="tab" data-tab="hebdo">
+            <span class="tab-icon">📅</span>
+            Hebdo
+        </div>
+        <div class="tab" data-tab="periodique">
+            <span class="tab-icon">🔄</span>
+            Périodique
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="tab-content active" id="ouverture-content">
+            <div class="section-title">☀️ Tâches d'Ouverture</div>
+            <div id="ouverture-list"><div class="loading">Chargement...</div></div>
+        </div>
+
+        <div class="tab-content" id="fermeture-content">
+            <div class="section-title">🌙 Tâches de Fermeture</div>
+            <div id="fermeture-list"><div class="loading">Chargement...</div></div>
+        </div>
+
+        <div class="tab-content" id="inventaire-content">
+            <div class="section-title">🍦 Inventaire des Gelatos</div>
+            <button class="add-btn" id="addGelatoBtn">+ Ajouter un Gelato</button>
+            <div id="gelato-list"><div class="loading">Chargement...</div></div>
+        </div>
+
+        <div class="tab-content" id="hebdo-content">
+            <div class="section-title">📅 Tâches Hebdomadaires</div>
+            <div class="week-display" id="week-display"></div>
+            <div id="hebdo-list"><div class="loading">Chargement...</div></div>
+        </div>
+
+        <div class="tab-content" id="periodique-content">
+            <div class="section-title">🔄 Tâches Périodiques</div>
+            <div id="periodique-list"><div class="loading">Chargement...</div></div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="codePinPopup">
+        <div class="popup code-popup">
+            <div class="popup-title">🔐 Code Superviseur</div>
+            <div class="form-group">
+                <input type="password" class="form-input code-input" id="codeInput" placeholder="••••" maxlength="4" inputmode="numeric">
+            </div>
+            <div class="popup-actions">
+                <button class="btn-save" id="validateCodeBtn">✓ Valider</button>
+                <button class="btn-cancel" id="cancelCodeBtn">✕ Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="gelatoPopup">
+        <div class="popup">
+            <div class="popup-title" id="gelatoPopupTitle">➕ Ajouter un Gelato</div>
+            <div class="form-group">
+                <label class="form-label">Nom du gelato</label>
+                <input type="text" class="form-input" id="gelatoNom" placeholder="Ex: Vanille Madagascar">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Créé par</label>
+                <input type="text" class="form-input" id="gelatoCreePar" placeholder="Votre nom">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Date de production</label>
+                <input type="date" class="form-input" id="gelatoProduction">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Date au comptoir</label>
+                <input type="date" class="form-input" id="gelatoComptoir">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Date de péremption</label>
+                <input type="date" class="form-input" id="gelatoPeremption">
+            </div>
+            <div class="popup-actions">
+                <button class="btn-save" id="saveGelatoBtn">✓ Sauvegarder</button>
+                <button class="btn-cancel" id="cancelGelatoBtn">✕ Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/+esm'
+
+const SUPABASE_URL = 'https://hdmjxsecznnuluuwhekj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkbWp4c2Vjem5udWx1dXdoZWtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2MzU5ODMsImV4cCI6MjA4NjIxMTk4M30.oaHs5jVFAEO6Mr5J4cr8bKSGQ295Rddu4WXTaowQXbU';
+const SUPERVISOR_CODE = '1234';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let state = {
+    isSupervisor: false,
+    currentEditGelato: null,
+    tachesOuverture: [],
+    tachesFermeture: [],
+    gelatos: [],
+    tachesHebdo: [],
+    tachesPeriodique: []
+};
+
+function updateSyncStatus(message, synced = false) {
+    const status = document.getElementById('syncStatus');
+    status.textContent = message;
+    status.classList.toggle('synced', synced);
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+}
+
+function daysBetween(date1, date2) {
+    return Math.round((new Date(date2) - new Date(date1)) / (24 * 60 * 60 * 1000));
+}
+
+function getWeekDates() {
+    const now = new Date();
+    const diff = now.getDay() === 0 ? -6 : 1 - now.getDay();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diff);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    return {
+        start: formatDate(monday.toISOString().split('T')[0]),
+        end: formatDate(sunday.toISOString().split('T')[0])
+    };
+}
+
+function showNotification(message, isError = false) {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.classList.toggle('error', isError);
+    notification.classList.add('active');
+    setTimeout(() => notification.classList.remove('active'), 2500);
+}
+
+async function loadTasks(tableName, stateKey) {
+    try {
+        const { data, error } = await supabase
+            .from(tableName)
+            .select('*')
+            .order('ordre', { ascending: true });
+        
+        if (error) throw error;
+        
+        state[stateKey] = data || [];
+        renderTaskList(state[stateKey], `${tableName.replace('taches_', '')}-list`);
+        updateSyncStatus('✓ Synchronisé', true);
+    } catch (error) {
+        console.error('Erreur chargement:', error);
+        showNotification('Erreur de chargement', true);
+    }
+}
+
+async function loadGelatos() {
+    try {
+        const { data, error } = await supabase
+            .from('gelatos')
+            .select('*')
+            .order('date_peremption', { ascending: true });
+        
+        if (error) throw error;
+        
+        state.gelatos = data || [];
+        renderGelatos();
+        updateSyncStatus('✓ Synchronisé', true);
+    } catch (error) {
+        console.error('Erreur chargement gelatos:', error);
+        showNotification('Erreur de chargement', true);
+    }
+}
+
+function renderTaskList(tasks, containerId) {
+    const container = document.getElementById(containerId);
+    
+    if (tasks.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📝</div>
+                <div>Aucune tâche pour le moment</div>
+                ${state.isSupervisor ? '<button class="add-btn" style="margin-top: 15px;" onclick="window.addNewTask(\'' + containerId + '\')">+ Ajouter une tâche</button>' : ''}
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    if (state.isSupervisor) {
+        html += `<button class="add-btn" onclick="window.addNewTask('${containerId}')">+ Ajouter une tâche</button>`;
+    }
+    
+    html += tasks.map(task => `
+        <div class="task-item">
+            <input type="checkbox" class="checkbox" ${task.completed ? 'checked' : ''} onchange="window.toggleTask('${containerId}', ${task.id})">
+            <div class="task-text ${task.completed ? 'completed' : ''}">
+                ${task.texte}${task.frequence ? ` <span style="color: #3498db; font-size: 11px;">(${task.frequence})</span>` : ''}
+            </div>
+            ${state.isSupervisor ? `
+                <div style="display: flex; gap: 5px; margin-left: auto; flex-shrink: 0;">
+                    <button class="btn-edit" style="width: 60px; padding: 6px; font-size: 11px;" onclick="window.editTask('${containerId}', ${task.id})">✏️</button>
+                    <button class="btn-delete" style="width: 60px; padding: 6px; font-size: 11px;" onclick="window.deleteTask('${containerId}', ${task.id})">🗑️</button>
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+    
+    container.innerHTML = html;
+}
+
+async function toggleTask(listType, taskId) {
+    const tableName = getTableName(listType);
+    const tasks = getTasksForList(listType);
+    const task = tasks.find(t => t.id === taskId);
+    
+    if (!task) return;
+    
+    try {
+        const { error } = await supabase
+            .from(tableName)
+            .update({ completed: !task.completed })
+            .eq('id', taskId);
+        
+        if (error) throw error;
+        
+        task.completed = !task.completed;
+        renderTaskList(tasks, listType);
+        showNotification(task.completed ? 'Tâche complétée ✓' : 'Tâche réouverte');
+    } catch (error) {
+        console.error('Erreur update:', error);
+        showNotification('Erreur de mise à jour', true);
+    }
+}
+
+function getTableName(listType) {
+    if (listType === 'ouverture-list') return 'taches_ouverture';
+    if (listType === 'fermeture-list') return 'taches_fermeture';
+    if (listType === 'hebdo-list') return 'taches_hebdo';
+    if (listType === 'periodique-list') return 'taches_periodique';
+    return '';
+}
+
+function getTasksForList(listType) {
+    if (listType === 'ouverture-list') return state.tachesOuverture;
+    if (listType === 'fermeture-list') return state.tachesFermeture;
+    if (listType === 'hebdo-list') return state.tachesHebdo;
+    if (listType === 'periodique-list') return state.tachesPeriodique;
+    return [];
+}
+
+async function addNewTask(listType) {
+    if (!state.isSupervisor) {
+        showNotification('Mode superviseur requis', true);
+        return;
+    }
+    
+    const taskText = prompt('Entrez le texte de la nouvelle tâche:');
+    if (!taskText || !taskText.trim()) return;
+    
+    const tableName = getTableName(listType);
+    const tasks = getTasksForList(listType);
+    const maxOrdre = Math.max(...tasks.map(t => t.ordre), 0);
+    
+    const newTask = {
+        texte: taskText.trim(),
+        completed: false,
+        ordre: maxOrdre + 1
+    };
+    
+    if (listType === 'periodique-list') {
+        const frequence = prompt('Fréquence (Hebdomadaire, Mensuel, Trimestriel):');
+        if (frequence) newTask.frequence = frequence;
+    }
+    
+    try {
+        const { error } = await supabase
+            .from(tableName)
+            .insert([newTask]);
+        
+        if (error) throw error;
+        
+        await reloadList(listType);
+        showNotification('Tâche ajoutée ✓');
+    } catch (error) {
+        console.error('Erreur ajout:', error);
+        showNotification('Erreur d\'ajout', true);
+    }
+}
+
+async function editTask(listType, taskId) {
+    if (!state.isSupervisor) {
+        showNotification('Mode superviseur requis', true);
+        return;
+    }
+    
+    const tasks = getTasksForList(listType);
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+    
+    const newText = prompt('Modifier la tâche:', task.texte);
+    if (newText === null) return;
+    
+    if (!newText.trim()) return;
+    
+    const tableName = getTableName(listType);
+    const updates = { texte: newText.trim() };
+    
+    if (listType === 'periodique-list') {
+        const newFrequence = prompt('Fréquence:', task.frequence || '');
+        if (newFrequence !== null) updates.frequence = newFrequence;
+    }
+    
+    try {
+        const { error } = await supabase
+            .from(tableName)
+            .update(updates)
+            .eq('id', taskId);
+        
+        if (error) throw error;
+        
+        await reloadList(listType);
+        showNotification('Tâche modifiée ✓');
+    } catch (error) {
+        console.error('Erreur modification:', error);
+        showNotification('Erreur de modification', true);
+    }
+}
+
+async function deleteTask(listType, taskId) {
+    if (!state.isSupervisor) {
+        showNotification('Mode superviseur requis', true);
+        return;
+    }
+    
+    const tasks = getTasksForList(listType);
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+    
+    if (!confirm(`Supprimer la tâche "${task.texte}" ?`)) return;
+    
+    const tableName = getTableName(listType);
+    
+    try {
+        const { error } = await supabase
+            .from(tableName)
+            .delete()
+            .eq('id', taskId);
+        
+        if (error) throw error;
+        
+        await reloadList(listType);
+        showNotification('Tâche supprimée ✓');
+    } catch (error) {
+        console.error('Erreur suppression:', error);
+        showNotification('Erreur de suppression', true);
+    }
+}
+
+async function reloadList(listType) {
+    const tableName = getTableName(listType);
+    
+    if (tableName === 'taches_ouverture') await loadTasks('taches_ouverture', 'tachesOuverture');
+    if (tableName === 'taches_fermeture') await loadTasks('taches_fermeture', 'tachesFermeture');
+    if (tableName === 'taches_hebdo') await loadTasks('taches_hebdo', 'tachesHebdo');
+    if (tableName === 'taches_periodique') await loadTasks('taches_periodique', 'tachesPeriodique');
+}
+
+function renderGelatos() {
+    const container = document.getElementById('gelato-list');
+    
+    if (state.gelatos.length === 0) {
+        container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🍦</div><div>Aucun gelato</div></div>`;
+        return;
+    }
+    
+    container.innerHTML = state.gelatos.map(gelato => {
+        const daysLeft = daysBetween(new Date().toISOString().split('T')[0], gelato.date_peremption);
+        const urgency = daysLeft <= 2 ? 'urgent' : daysLeft <= 5 ? 'warning' : 'ok';
+        
+        return `
+            <div class="gelato-card ${urgency}">
+                <div class="gelato-name">${gelato.nom}</div>
+                <div class="gelato-info">Créé par: ${gelato.cree_par}</div>
+                <div class="gelato-dates">📅 Production: ${formatDate(gelato.date_production)} | Comptoir: ${formatDate(gelato.date_comptoir)}</div>
+                <div class="gelato-peremption ${urgency}">⚠️ Péremption: ${formatDate(gelato.date_peremption)} (${daysLeft} jour${daysLeft > 1 ? 's' : ''})</div>
+                <div class="gelato-actions">
+                    <button class="btn-edit" onclick="window.editGelato(${gelato.id})">✏️ Modifier</button>
+                    <button class="btn-delete" onclick="window.deleteGelato(${gelato.id})">🗑️ Supprimer</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function openGelatoPopup() {
+    document.getElementById('gelatoPopupTitle').textContent = '➕ Ajouter un Gelato';
+    document.getElementById('gelatoNom').value = '';
+    document.getElementById('gelatoCreePar').value = '';
+    
+    const today = new Date().toISOString().split('T')[0];
+    const weekLater = new Date();
+    weekLater.setDate(weekLater.getDate() + 7);
+    
+    document.getElementById('gelatoProduction').value = today;
+    document.getElementById('gelatoComptoir').value = today;
+    document.getElementById('gelatoPeremption').value = weekLater.toISOString().split('T')[0];
+    
+    state.currentEditGelato = null;
+    document.getElementById('gelatoPopup').classList.add('active');
+}
+
+function editGelato(id) {
+    const gelato = state.gelatos.find(g => g.id === id);
+    if (!gelato) return;
+    
+    document.getElementById('gelatoPopupTitle').textContent = '✏️ Modifier le Gelato';
+    document.getElementById('gelatoNom').value = gelato.nom;
+    document.getElementById('gelatoCreePar').value = gelato.cree_par;
+    document.getElementById('gelatoProduction').value = gelato.date_production;
+    document.getElementById('gelatoComptoir').value = gelato.date_comptoir;
+    document.getElementById('gelatoPeremption').value = gelato.date_peremption;
+    
+    state.currentEditGelato = id;
+    document.getElementById('gelatoPopup').classList.add('active');
+}
+
+async function saveGelato() {
+    const nom = document.getElementById('gelatoNom').value.trim();
+    const cree_par = document.getElementById('gelatoCreePar').value.trim();
+    const date_production = document.getElementById('gelatoProduction').value;
+    const date_comptoir = document.getElementById('gelatoComptoir').value;
+    const date_peremption = document.getElementById('gelatoPeremption').value;
+    
+    if (!nom || !cree_par || !date_production || !date_comptoir || !date_peremption) {
+        showNotification('Veuillez remplir tous les champs', true);
+        return;
+    }
+    
+    try {
+        if (state.currentEditGelato) {
+            const { error } = await supabase
+                .from('gelatos')
+                .update({ nom, cree_par, date_production, date_comptoir, date_peremption })
+                .eq('id', state.currentEditGelato);
+            
+            if (error) throw error;
+            showNotification('Gelato modifié ✓');
+        } else {
+            const { error } = await supabase
+                .from('gelatos')
+                .insert([{ nom, cree_par, date_production, date_comptoir, date_peremption }]);
+            
+            if (error) throw error;
+            showNotification('Gelato ajouté ✓');
+        }
+        
+        await loadGelatos();
+        closeGelatoPopup();
+    } catch (error) {
+        console.error('Erreur sauvegarde gelato:', error);
+        showNotification('Erreur de sauvegarde', true);
+    }
+}
+
+async function deleteGelato(id) {
+    const gelato = state.gelatos.find(g => g.id === id);
+    if (!gelato) return;
+    
+    if (!confirm(`Supprimer "${gelato.nom}" ?`)) return;
+    
+    try {
+        const { error } = await supabase
+            .from('gelatos')
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw error;
+        
+        await loadGelatos();
+        showNotification('Gelato supprimé ✓');
+    } catch (error) {
+        console.error('Erreur suppression gelato:', error);
+        showNotification('Erreur de suppression', true);
+    }
+}
+
+function closeGelatoPopup() {
+    document.getElementById('gelatoPopup').classList.remove('active');
+}
+
+function toggleSupervisorMode() {
+    if (state.isSupervisor) {
+        state.isSupervisor = false;
+        updateSupervisorButton();
+        showNotification('Mode Employé activé');
+    } else {
+        document.getElementById('codeInput').value = '';
+        document.getElementById('codePinPopup').classList.add('active');
+        setTimeout(() => document.getElementById('codeInput').focus(), 100);
+    }
+}
+
+function validateCode() {
+    const code = document.getElementById('codeInput').value;
+    
+    if (code === SUPERVISOR_CODE) {
+        state.isSupervisor = true;
+        updateSupervisorButton();
+        document.getElementById('codePinPopup').classList.remove('active');
+        showNotification('Mode Superviseur activé ✓');
+    } else {
+        showNotification('❌ Code incorrect', true);
+        document.getElementById('codeInput').value = '';
+        document.getElementById('codeInput').focus();
+    }
+}
+
+function cancelCode() {
+    document.getElementById('codePinPopup').classList.remove('active');
+    document.getElementById('codeInput').value = '';
+}
+
+function updateSupervisorButton() {
+    const btn = document.getElementById('supervisorBtn');
+    if (state.isSupervisor) {
+        btn.textContent = '👤 Superviseur';
+        btn.classList.add('active');
+    } else {
+        btn.textContent = '👤 Employé';
+        btn.classList.remove('active');
+    }
+    
+    renderTaskList(state.tachesOuverture, 'ouverture-list');
+    renderTaskList(state.tachesFermeture, 'fermeture-list');
+    renderTaskList(state.tachesHebdo, 'hebdo-list');
+    renderTaskList(state.tachesPeriodique, 'periodique-list');
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === tabName);
+    });
+    
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    document.getElementById(`${tabName}-content`).classList.add('active');
+}
+
+function updateWeekDisplay() {
+    const week = getWeekDates();
+    document.getElementById('week-display').innerHTML = `<strong>Semaine du ${week.start} au ${week.end}</strong>`;
+}
+
+function setupRealtimeSubscriptions() {
+    supabase
+        .channel('taches_ouverture_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'taches_ouverture' }, () => {
+            loadTasks('taches_ouverture', 'tachesOuverture');
+        })
+        .subscribe();
+    
+    supabase
+        .channel('taches_fermeture_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'taches_fermeture' }, () => {
+            loadTasks('taches_fermeture', 'tachesFermeture');
+        })
+        .subscribe();
+    
+    supabase
+        .channel('taches_hebdo_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'taches_hebdo' }, () => {
+            loadTasks('taches_hebdo', 'tachesHebdo');
+        })
+        .subscribe();
+    
+    supabase
+        .channel('taches_periodique_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'taches_periodique' }, () => {
+            loadTasks('taches_periodique', 'tachesPeriodique');
+        })
+        .subscribe();
+    
+    supabase
+        .channel('gelatos_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'gelatos' }, () => {
+            loadGelatos();
+        })
+        .subscribe();
+}
+
+async function init() {
+    updateSyncStatus('Chargement...', false);
+    
+    await Promise.all([
+        loadTasks('taches_ouverture', 'tachesOuverture'),
+        loadTasks('taches_fermeture', 'tachesFermeture'),
+        loadTasks('taches_hebdo', 'tachesHebdo'),
+        loadTasks('taches_periodique', 'tachesPeriodique'),
+        loadGelatos()
+    ]);
+    
+    updateWeekDisplay();
+    setupRealtimeSubscriptions();
+    
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+    });
+    
+    document.getElementById('supervisorBtn').addEventListener('click', toggleSupervisorMode);
+    document.getElementById('validateCodeBtn').addEventListener('click', validateCode);
+    document.getElementById('cancelCodeBtn').addEventListener('click', cancelCode);
+    
+    document.getElementById('codeInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') validateCode();
+    });
+    
+    document.getElementById('addGelatoBtn').addEventListener('click', openGelatoPopup);
+    document.getElementById('saveGelatoBtn').addEventListener('click', saveGelato);
+    document.getElementById('cancelGelatoBtn').addEventListener('click', closeGelatoPopup);
+    
+    document.getElementById('gelatoPopup').addEventListener('click', (e) => {
+        if (e.target.id === 'gelatoPopup') closeGelatoPopup();
+    });
+    
+    document.getElementById('codePinPopup').addEventListener('click', (e) => {
+        if (e.target.id === 'codePinPopup') cancelCode();
+    });
+}
+
+window.toggleTask = toggleTask;
+window.editGelato = editGelato;
+window.deleteGelato = deleteGelato;
+window.addNewTask = addNewTask;
+window.editTask = editTask;
+window.deleteTask = deleteTask;
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+    </script>
+</body>
+</html>
