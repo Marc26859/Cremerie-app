@@ -434,6 +434,274 @@
             padding: 20px;
             color: #7f8c8d;
         }
+
+        .employee-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #4F6BED;
+        }
+
+        .employee-panel-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #4F6BED;
+            margin-bottom: 10px;
+        }
+
+        .employee-name-tag {
+            display: inline-flex;
+            align-items: center;
+            background: #EEF1FF;
+            color: #4F6BED;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px 4px 4px 0;
+        }
+
+        .employee-name-tag .remove-emp {
+            margin-left: 6px;
+            cursor: pointer;
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .employee-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .employee-input-row input[type="text"] {
+            flex: 2;
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .employee-input-row input[type="date"] {
+            flex: 2;
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .employee-input-row input:focus {
+            outline: none;
+            border-color: #4F6BED;
+        }
+
+        .employee-input-row button {
+            flex: 1;
+            background: #4F6BED;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .email-btn {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+            transition: all 0.3s;
+            display: none;
+        }
+
+        .email-btn.visible {
+            display: block;
+        }
+
+        .email-btn:active {
+            transform: scale(0.98);
+        }
+
+        .progress-bar-wrap {
+            background: #ecf0f1;
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #4F6BED, #2ecc71);
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        /* ---- ÉCRAN DE VERROUILLAGE ---- */
+        .lock-screen {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .lock-screen-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+
+        .lock-screen-subtitle {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-bottom: 20px;
+        }
+
+        .lock-screen .form-group {
+            margin-bottom: 12px;
+        }
+
+        .lock-screen .form-label {
+            display: block;
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .lock-screen .form-input {
+            width: 100%;
+            padding: 13px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .lock-screen .form-input:focus {
+            outline: none;
+            border-color: #4F6BED;
+        }
+
+        .lock-emp-add-btn {
+            width: 100%;
+            background: #4F6BED;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+
+        .lock-emp-add-btn:active { background: #3a56d4; }
+
+        .lock-emp-list {
+            margin-bottom: 15px;
+            min-height: 10px;
+        }
+
+        .lock-emp-tag {
+            display: inline-flex;
+            align-items: center;
+            background: #EEF1FF;
+            color: #4F6BED;
+            border-radius: 20px;
+            padding: 6px 13px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px 4px 4px 0;
+        }
+
+        .lock-emp-tag .remove-emp {
+            margin-left: 7px;
+            cursor: pointer;
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1;
+        }
+
+        .lock-start-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(46,204,113,0.35);
+            transition: all 0.2s;
+        }
+
+        .lock-start-btn:active { transform: scale(0.98); }
+
+        .tasks-wrapper {
+            display: none;
+        }
+
+        .tasks-wrapper.unlocked {
+            display: block;
+        }
+
+        .session-bar {
+            background: #EEF1FF;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .session-bar-info {
+            font-size: 12px;
+            color: #4F6BED;
+            font-weight: 600;
+        }
+
+        .session-reset-btn {
+            background: none;
+            border: 1.5px solid #e74c3c;
+            color: #e74c3c;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -456,7 +724,7 @@
         </div>
         <div class="tab" data-tab="inventaire">
             <span class="tab-icon">🍦</span>
-            Inventaire
+            Gélatos/Sorbet
         </div>
         <div class="tab" data-tab="hebdo">
             <span class="tab-icon">📅</span>
@@ -471,16 +739,76 @@
     <div class="content">
         <div class="tab-content active" id="ouverture-content">
             <div class="section-title">☀️ Tâches d'Ouverture</div>
-            <div id="ouverture-list"><div class="loading">Chargement...</div></div>
+
+            <!-- ÉCRAN DE VERROUILLAGE -->
+            <div class="lock-screen" id="ouverture-lock">
+                <div class="lock-screen-title">🔐 Identification requise</div>
+                <div class="lock-screen-subtitle">Entrez votre nom et la date avant de commencer</div>
+                <div class="form-group">
+                    <label class="form-label">Nom de l'employé</label>
+                    <input type="text" class="form-input" id="ouverture-lock-name" placeholder="Votre prénom et nom">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="ouverture-lock-date">
+                </div>
+                <button class="lock-emp-add-btn" onclick="lockAddEmployee('ouverture')">+ Ajouter un autre employé</button>
+                <div class="lock-emp-list" id="ouverture-lock-emplist"></div>
+                <button class="lock-start-btn" onclick="unlockTasks('ouverture')">✓ Commencer l'ouverture</button>
+            </div>
+
+            <!-- TÂCHES (masquées jusqu'à identification) -->
+            <div class="tasks-wrapper" id="ouverture-tasks-wrapper">
+                <div class="session-bar">
+                    <div class="session-bar-info" id="ouverture-session-info"></div>
+                    <button class="session-reset-btn" onclick="resetSession('ouverture')">↩ Changer d'employé</button>
+                </div>
+                <div class="progress-bar-wrap" id="ouverture-progress-wrap" style="display:none;">
+                    <div class="progress-bar-fill" id="ouverture-progress-fill"></div>
+                </div>
+                <div class="progress-text" id="ouverture-progress-text"></div>
+                <button class="email-btn" id="ouverture-email-btn" onclick="sendEmail('ouverture')">📧 Envoyer la liste complétée par email</button>
+                <div id="ouverture-list"><div class="loading">Chargement...</div></div>
+            </div>
         </div>
 
         <div class="tab-content" id="fermeture-content">
             <div class="section-title">🌙 Tâches de Fermeture</div>
-            <div id="fermeture-list"><div class="loading">Chargement...</div></div>
+
+            <!-- ÉCRAN DE VERROUILLAGE -->
+            <div class="lock-screen" id="fermeture-lock">
+                <div class="lock-screen-title">🔐 Identification requise</div>
+                <div class="lock-screen-subtitle">Entrez votre nom et la date avant de commencer</div>
+                <div class="form-group">
+                    <label class="form-label">Nom de l'employé</label>
+                    <input type="text" class="form-input" id="fermeture-lock-name" placeholder="Votre prénom et nom">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="fermeture-lock-date">
+                </div>
+                <button class="lock-emp-add-btn" onclick="lockAddEmployee('fermeture')">+ Ajouter un autre employé</button>
+                <div class="lock-emp-list" id="fermeture-lock-emplist"></div>
+                <button class="lock-start-btn" onclick="unlockTasks('fermeture')">✓ Commencer la fermeture</button>
+            </div>
+
+            <!-- TÂCHES (masquées jusqu'à identification) -->
+            <div class="tasks-wrapper" id="fermeture-tasks-wrapper">
+                <div class="session-bar">
+                    <div class="session-bar-info" id="fermeture-session-info"></div>
+                    <button class="session-reset-btn" onclick="resetSession('fermeture')">↩ Changer d'employé</button>
+                </div>
+                <div class="progress-bar-wrap" id="fermeture-progress-wrap" style="display:none;">
+                    <div class="progress-bar-fill" id="fermeture-progress-fill"></div>
+                </div>
+                <div class="progress-text" id="fermeture-progress-text"></div>
+                <button class="email-btn" id="fermeture-email-btn" onclick="sendEmail('fermeture')">📧 Envoyer la liste complétée par email</button>
+                <div id="fermeture-list"><div class="loading">Chargement...</div></div>
+            </div>
         </div>
 
         <div class="tab-content" id="inventaire-content">
-            <div class="section-title">🍦 Inventaire des Gelatos</div>
+            <div class="section-title">🍦 Gélatos/Sorbet</div>
             <button class="add-btn" id="addGelatoBtn">+ Ajouter un Gelato</button>
             <div id="gelato-list"><div class="loading">Chargement...</div></div>
         </div>
@@ -607,7 +935,10 @@ async function loadTasks(tableName, stateKey) {
         if (error) throw error;
         
         state[stateKey] = data || [];
-        renderTaskList(state[stateKey], `${tableName.replace('taches_', '')}-list`);
+        const listId = `${tableName.replace('taches_', '')}-list`;
+        renderTaskList(state[stateKey], listId);
+        if (tableName === 'taches_ouverture') updateProgress('ouverture');
+        if (tableName === 'taches_fermeture') updateProgress('fermeture');
         updateSyncStatus('✓ Synchronisé', true);
     } catch (error) {
         console.error('Erreur chargement:', error);
@@ -687,6 +1018,8 @@ async function toggleTask(listType, taskId) {
         
         task.completed = !task.completed;
         renderTaskList(tasks, listType);
+        if (listType === 'ouverture-list') updateProgress('ouverture');
+        if (listType === 'fermeture-list') updateProgress('fermeture');
         showNotification(task.completed ? 'Tâche complétée ✓' : 'Tâche réouverte');
     } catch (error) {
         console.error('Erreur update:', error);
@@ -1137,6 +1470,173 @@ function setupDailyReset() {
     setInterval(checkAndReset, 5 * 60 * 1000); // 5 minutes
 }
 
+// ========= EMPLOYÉS & VERROUILLAGE =========
+
+let employees = {
+    ouverture: [],
+    fermeture: []
+};
+
+// Employés en attente dans l'écran de verrouillage (avant confirmation)
+let lockPending = {
+    ouverture: [],
+    fermeture: []
+};
+
+function formatDateFr(dateStr) {
+    if (!dateStr) return '';
+    const [y, m, d] = dateStr.split('-');
+    return `${d}/${m}/${y}`;
+}
+
+// Ajoute un employé à la liste "en attente" sur l'écran de lock
+function lockAddEmployee(type) {
+    const nameInput = document.getElementById(`${type}-lock-name`);
+    const dateInput = document.getElementById(`${type}-lock-date`);
+    const name = nameInput.value.trim();
+    const date = dateInput.value;
+
+    if (!name) {
+        showNotification('Veuillez entrer un nom', true);
+        nameInput.focus();
+        return;
+    }
+    if (!date) {
+        showNotification('Veuillez choisir une date', true);
+        dateInput.focus();
+        return;
+    }
+
+    lockPending[type].push({ name, date });
+    nameInput.value = '';
+    dateInput.value = new Date().toISOString().split('T')[0];
+    nameInput.focus();
+    renderLockEmpList(type);
+}
+
+function renderLockEmpList(type) {
+    const container = document.getElementById(`${type}-lock-emplist`);
+    if (lockPending[type].length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    container.innerHTML = lockPending[type].map((emp, i) => `
+        <span class="lock-emp-tag">
+            👤 ${emp.name} — ${formatDateFr(emp.date)}
+            <span class="remove-emp" onclick="window.lockRemoveEmployee('${type}', ${i})">×</span>
+        </span>
+    `).join('');
+}
+
+function lockRemoveEmployee(type, index) {
+    lockPending[type].splice(index, 1);
+    renderLockEmpList(type);
+}
+
+// Valide l'identification et affiche les tâches
+function unlockTasks(type) {
+    const nameInput = document.getElementById(`${type}-lock-name`);
+    const dateInput = document.getElementById(`${type}-lock-date`);
+    const name = nameInput.value.trim();
+    const date = dateInput.value;
+
+    // Ajouter l'employé principal s'il n'a pas cliqué "+ Ajouter"
+    let allEmployees = [...lockPending[type]];
+    if (name || date) {
+        if (!name) { showNotification('Veuillez entrer un nom', true); nameInput.focus(); return; }
+        if (!date) { showNotification('Veuillez choisir une date', true); dateInput.focus(); return; }
+        allEmployees.push({ name, date });
+    }
+
+    if (allEmployees.length === 0) {
+        showNotification('Entrez au moins un nom et une date', true);
+        nameInput.focus();
+        return;
+    }
+
+    employees[type] = allEmployees;
+
+    // Afficher les infos de session
+    const empText = employees[type].map(e => `👤 ${e.name} (${formatDateFr(e.date)})`).join('  •  ');
+    document.getElementById(`${type}-session-info`).textContent = empText;
+
+    // Masquer lock, afficher tâches
+    document.getElementById(`${type}-lock`).style.display = 'none';
+    document.getElementById(`${type}-tasks-wrapper`).classList.add('unlocked');
+
+    updateProgress(type);
+}
+
+// Réinitialiser la session (retour à l'écran de lock)
+function resetSession(type) {
+    employees[type] = [];
+    lockPending[type] = [];
+
+    // Remettre l'écran de lock
+    document.getElementById(`${type}-lock`).style.display = 'block';
+    document.getElementById(`${type}-lock-name`).value = '';
+    document.getElementById(`${type}-lock-date`).value = new Date().toISOString().split('T')[0];
+    document.getElementById(`${type}-lock-emplist`).innerHTML = '';
+    document.getElementById(`${type}-tasks-wrapper`).classList.remove('unlocked');
+}
+
+function updateProgress(type) {
+    const tasks = type === 'ouverture' ? state.tachesOuverture : state.tachesFermeture;
+    if (tasks.length === 0) return;
+
+    const done = tasks.filter(t => t.completed).length;
+    const total = tasks.length;
+    const pct = Math.round((done / total) * 100);
+
+    const wrap = document.getElementById(`${type}-progress-wrap`);
+    const fill = document.getElementById(`${type}-progress-fill`);
+    const text = document.getElementById(`${type}-progress-text`);
+    const emailBtn = document.getElementById(`${type}-email-btn`);
+
+    wrap.style.display = 'block';
+    fill.style.width = pct + '%';
+    text.textContent = `${done} / ${total} tâches complétées`;
+
+    if (done === total && total > 0) {
+        emailBtn.classList.add('visible');
+    } else {
+        emailBtn.classList.remove('visible');
+    }
+}
+
+function sendEmail(type) {
+    const tasks = type === 'ouverture' ? state.tachesOuverture : state.tachesFermeture;
+    const label = type === 'ouverture' ? 'Ouverture' : 'Fermeture';
+    const emoji = type === 'ouverture' ? '☀️' : '🌙';
+
+    if (employees[type].length === 0) {
+        showNotification('Aucun employé identifié', true);
+        return;
+    }
+
+    const empList = employees[type].map(e => `${e.name} (${formatDateFr(e.date)})`).join(', ');
+    const today = formatDateFr(new Date().toISOString().split('T')[0]);
+    const taskLines = tasks.map(t => `${t.completed ? '✅' : '❌'} ${t.texte}`).join('\n');
+
+    const subject = encodeURIComponent(`${emoji} Liste ${label} — ${today}`);
+    const body = encodeURIComponent(
+`${emoji} LISTE DE ${label.toUpperCase()} — ${today}
+${'='.repeat(40)}
+
+👤 Employé(s): ${empList}
+
+📋 TÂCHES:
+${taskLines}
+
+${'='.repeat(40)}
+Envoyé depuis l'application Bar Laitier`
+    );
+
+    window.location.href = `mailto:cremeetcie@formationlangevin.com?subject=${subject}&body=${body}`;
+}
+
+// ========= FIN EMPLOYÉS & VERROUILLAGE =========
+
 async function init() {
     updateSyncStatus('Chargement...', false);
     
@@ -1167,6 +1667,13 @@ async function init() {
     document.getElementById('addGelatoBtn').addEventListener('click', openGelatoPopup);
     document.getElementById('saveGelatoBtn').addEventListener('click', saveGelato);
     document.getElementById('cancelGelatoBtn').addEventListener('click', closeGelatoPopup);
+
+    // Touche Enter sur les champs de lock
+    ['ouverture', 'fermeture'].forEach(type => {
+        document.getElementById(`${type}-lock-name`).addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') unlockTasks(type);
+        });
+    });
     
     document.getElementById('gelatoPopup').addEventListener('click', (e) => {
         if (e.target.id === 'gelatoPopup') closeGelatoPopup();
@@ -1183,6 +1690,16 @@ window.deleteGelato = deleteGelato;
 window.addNewTask = addNewTask;
 window.editTask = editTask;
 window.deleteTask = deleteTask;
+window.lockAddEmployee = lockAddEmployee;
+window.lockRemoveEmployee = lockRemoveEmployee;
+window.unlockTasks = unlockTasks;
+window.resetSession = resetSession;
+window.sendEmail = sendEmail;
+
+// Pré-remplir la date d'aujourd'hui sur les écrans de lock
+const todayVal = new Date().toISOString().split('T')[0];
+document.getElementById('ouverture-lock-date').value = todayVal;
+document.getElementById('fermeture-lock-date').value = todayVal;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
