@@ -1043,7 +1043,7 @@
 
                 <div class="temp-appareil-card" id="card-machine-creme-1">
                     <div class="temp-appareil-name">Machine à crème 1</div>
-                    <div class="temp-appareil-norme">Norme : 4°C ou moins</div>
+                    <div class="temp-appareil-norme">✅ OK : ≤4°C  ⚠️ Surveiller : 4-5°C  🚨 Aviser : >5°C</div>
                     <div class="temp-input-row">
                         <input type="number" class="temp-input" id="temp-machine-creme-1" placeholder="ex: 2.5" step="0.1"
                                oninput="evalTemp(this, null, 4, 'card-machine-creme-1', 'badge-machine-creme-1')">
@@ -1054,7 +1054,7 @@
 
                 <div class="temp-appareil-card" id="card-machine-creme-2">
                     <div class="temp-appareil-name">Machine à crème 2</div>
-                    <div class="temp-appareil-norme">Norme : 4°C ou moins</div>
+                    <div class="temp-appareil-norme">✅ OK : ≤4°C  ⚠️ Surveiller : 4-5°C  🚨 Aviser : >5°C</div>
                     <div class="temp-input-row">
                         <input type="number" class="temp-input" id="temp-machine-creme-2" placeholder="ex: 2.5" step="0.1"
                                oninput="evalTemp(this, null, 4, 'card-machine-creme-2', 'badge-machine-creme-2')">
@@ -1068,7 +1068,7 @@
 
                 <div class="temp-appareil-card" id="card-table-froide">
                     <div class="temp-appareil-name">Table froide</div>
-                    <div class="temp-appareil-norme">Norme : 4°C ou moins</div>
+                    <div class="temp-appareil-norme">✅ OK : ≤4°C  ⚠️ Surveiller : 4-5°C  🚨 Aviser : >5°C</div>
                     <div class="temp-input-row">
                         <input type="number" class="temp-input" id="temp-table-froide" placeholder="ex: 3" step="0.1"
                                oninput="evalTemp(this, null, 4, 'card-table-froide', 'badge-table-froide')">
@@ -1079,7 +1079,7 @@
 
                 <div class="temp-appareil-card" id="card-presentoirs-gateaux">
                     <div class="temp-appareil-name">Présentoirs à Gâteaux</div>
-                    <div class="temp-appareil-norme">Norme : 4°C ou moins</div>
+                    <div class="temp-appareil-norme">✅ OK : ≤4°C  ⚠️ Surveiller : 4-5°C  🚨 Aviser : >5°C</div>
                     <div class="temp-input-row">
                         <input type="number" class="temp-input" id="temp-presentoirs-gateaux" placeholder="ex: 3" step="0.1"
                                oninput="evalTemp(this, null, 4, 'card-presentoirs-gateaux', 'badge-presentoirs-gateaux')">
@@ -1089,7 +1089,7 @@
                 </div>
 
                 <!-- SECTION FRIGIDAIRES -->
-                <div class="temp-section-label">🧊 Frigidaires — Norme : 4°C ou moins</div>
+                <div class="temp-section-label">🧊 Frigidaires — ✅ OK : ≤4°C  ⚠️ Surveiller : 4-5°C  🚨 Aviser : >5°C</div>
 
                 <div class="temp-appareil-card" id="card-frigo-1">
                     <div class="temp-appareil-name">Frigidaire 1</div>
@@ -2124,33 +2124,49 @@ function resetTempSession() {
 }
 
 function evalTemp(input, min, max, cardId, badgeId) {
-    const val  = parseFloat(input.value);
+    const val   = parseFloat(input.value);
     const card  = document.getElementById(cardId);
     const badge = document.getElementById(badgeId);
 
     if (input.value === '' || isNaN(val)) {
-        card.className  = 'temp-appareil-card';
-        badge.className = 'temp-alerte-badge';
+        card.className    = 'temp-appareil-card';
+        badge.className   = 'temp-alerte-badge';
         badge.textContent = '';
         return;
     }
 
-    // Rouge si : frigidaire > 4°C  OU  congélateur > -18°C
-    const enAlerte = (max !== null && val > max);
-
-    if (enAlerte) {
-        card.className    = 'temp-appareil-card alerte-danger';
-        badge.className   = 'temp-alerte-badge danger';
-        badge.textContent = '🚨 HORS NORME';
+    // Frigidaires : > 5°C = rouge DANGER, > 4°C = jaune WARNING, <= 4°C = vert OK
+    // Congélateurs : > -18°C = rouge DANGER (pas de jaune)
+    let statut;
+    if (max === 4) {
+        // Frigidaire / table
+        if (val > 5)       statut = 'danger';
+        else if (val > 4)  statut = 'warning';
+        else               statut = 'ok';
     } else {
-        card.className    = 'temp-appareil-card alerte-ok';
-        badge.className   = 'temp-alerte-badge ok';
-        badge.textContent = '✅ Normal';
+        // Congélateur
+        statut = (max !== null && val > max) ? 'danger' : 'ok';
     }
+
+    const labels = {
+        ok:      '✅ Normal',
+        warning: '⚠️ À surveiller',
+        danger:  '🚨 Aviser propriétaire'
+    };
+    card.className    = 'temp-appareil-card alerte-' + statut;
+    badge.className   = 'temp-alerte-badge ' + statut;
+    badge.textContent = labels[statut];
 }
 
 function getStatutTemp(val, max) {
     if (val === null || isNaN(val)) return 'neutre';
+    if (max === 4) {
+        // Frigidaire : > 5 = danger, > 4 = warning, <= 4 = ok
+        if (val > 5)      return 'danger';
+        if (val > 4)      return 'warning';
+        return 'ok';
+    }
+    // Congélateur
     return (max !== null && val > max) ? 'danger' : 'ok';
 }
 
@@ -2238,7 +2254,7 @@ function renderTempHistorique() {
             if (r.valeur === null) return;
             html += '<div class="temp-historique-row ' + r.statut + '">';
             html += '<span class="temp-historique-appareil">' + r.nom + '</span>';
-            html += '<span class="temp-historique-val ' + r.statut + '">' + r.valeur + '°C ' + (r.statut === 'danger' ? '🚨' : '✅') + '</span>';
+            html += '<span class="temp-historique-val ' + r.statut + '">' + r.valeur + '°C ' + (r.statut === 'danger' ? '🚨' : r.statut === 'warning' ? '⚠️' : '✅') + '</span>';
             html += '</div>';
         });
         html += '</div>';
