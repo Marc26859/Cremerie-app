@@ -246,16 +246,47 @@
             display: flex;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: background 0.2s;
         }
 
-        .checkbox {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            cursor: pointer;
-            accent-color: #2ecc71;
-            flex-shrink: 0;
+        .task-item.state-done {
+            background: #f0fdf4;
+            border-left: 4px solid #2ecc71;
         }
+
+        .task-item.state-skip {
+            background: #fff5f5;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .task-toggle-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #d0d0d0;
+            background: white;
+            font-size: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0;
+        }
+
+        .task-toggle-btn.state-done {
+            background: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .task-toggle-btn.state-skip {
+            background: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .task-toggle-btn:active { transform: scale(0.9); }
 
         .task-text {
             flex: 1;
@@ -266,6 +297,12 @@
         .task-text.completed {
             text-decoration: line-through;
             color: #95a5a6;
+        }
+
+        .task-text.skipped {
+            text-decoration: line-through;
+            color: #e74c3c;
+            opacity: 0.7;
         }
 
         .popup-overlay {
@@ -1324,7 +1361,12 @@ async function loadTasks(tableName, stateKey) {
         
         if (error) throw error;
         
-        state[stateKey] = data || [];
+        // taskState en mémoire seulement (0=attente, 1=fait, 2=non fait)
+        // Au chargement : reset tout à 0 (en attente) — les employés cochent en live
+        state[stateKey] = (data || []).map(t => ({
+            ...t,
+            taskState: 0
+        }));
         const listId = `${tableName.replace('taches_', '')}-list`;
         renderTaskList(state[stateKey], listId);
         if (tableName === 'taches_ouverture') updateProgress('ouverture');
@@ -1372,11 +1414,27 @@ function renderTaskList(tasks, containerId) {
     if (state.isSupervisor) {
         html += `<button class="add-btn" onclick="window.addNewTask('${containerId}')">+ Ajouter une tâche</button>`;
     }
+
+    // Légende
+    html += `<div style="display:flex; gap:12px; margin-bottom:12px; font-size:11px; color:#7f8c8d; align-items:center; flex-wrap:wrap;">
+        <span>Appuyer pour changer l'état :</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:18px;height:18px;border-radius:50%;border:2px solid #d0d0d0;display:inline-block;"></span> En attente</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:18px;height:18px;border-radius:50%;background:#2ecc71;display:inline-block;"></span> Fait</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:18px;height:18px;border-radius:50%;background:#e74c3c;display:inline-block;"></span> Non fait</span>
+    </div>`;
     
-    html += tasks.map(task => `
-        <div class="task-item">
-            <input type="checkbox" class="checkbox" ${task.completed ? 'checked' : ''} onchange="window.toggleTask('${containerId}', ${task.id})">
-            <div class="task-text ${task.completed ? 'completed' : ''}">
+    html += tasks.map(task => {
+        // taskState : 0 = en attente, 1 = fait (vert), 2 = non fait (rouge)
+        const s = task.taskState ?? 0;
+        const itemClass = s === 1 ? 'task-item state-done' : s === 2 ? 'task-item state-skip' : 'task-item';
+        const btnClass  = s === 1 ? 'task-toggle-btn state-done' : s === 2 ? 'task-toggle-btn state-skip' : 'task-toggle-btn';
+        const btnIcon   = s === 1 ? '✅' : s === 2 ? '❌' : '';
+        const textClass = s === 1 ? 'task-text completed' : s === 2 ? 'task-text skipped' : 'task-text';
+
+        return `
+        <div class="${itemClass}" id="task-item-${task.id}">
+            <button class="${btnClass}" onclick="window.toggleTask('${containerId}', ${task.id})">${btnIcon}</button>
+            <div class="${textClass}">
                 ${task.texte}${task.frequence ? ` <span style="color: #3498db; font-size: 11px;">(${task.frequence})</span>` : ''}
             </div>
             ${state.isSupervisor ? `
@@ -1386,35 +1444,25 @@ function renderTaskList(tasks, containerId) {
                 </div>
             ` : ''}
         </div>
-    `).join('');
+    `}).join('');
     
     container.innerHTML = html;
 }
 
 async function toggleTask(listType, taskId) {
-    const tableName = getTableName(listType);
     const tasks = getTasksForList(listType);
     const task = tasks.find(t => t.id === taskId);
-    
     if (!task) return;
-    
-    try {
-        const { error } = await supabase
-            .from(tableName)
-            .update({ completed: !task.completed })
-            .eq('id', taskId);
-        
-        if (error) throw error;
-        
-        task.completed = !task.completed;
-        renderTaskList(tasks, listType);
-        if (listType === 'ouverture-list') updateProgress('ouverture');
-        if (listType === 'fermeture-list') updateProgress('fermeture');
-        showNotification(task.completed ? 'Tâche complétée ✓' : 'Tâche réouverte');
-    } catch (error) {
-        console.error('Erreur update:', error);
-        showNotification('Erreur de mise à jour', true);
-    }
+
+    // Cycle : 0 (en attente) → 1 (fait ✅) → 2 (non fait ❌) → 0
+    task.taskState = ((task.taskState ?? 0) + 1) % 3;
+
+    renderTaskList(tasks, listType);
+    if (listType === 'ouverture-list') updateProgress('ouverture');
+    if (listType === 'fermeture-list') updateProgress('fermeture');
+
+    const msgs = ['↩️ Tâche réinitialisée', '✅ Tâche complétée !', '❌ Tâche non faite'];
+    showNotification(msgs[task.taskState]);
 }
 
 function getTableName(listType) {
@@ -1974,20 +2022,23 @@ function updateProgress(type) {
     const tasks = type === 'ouverture' ? state.tachesOuverture : state.tachesFermeture;
     if (tasks.length === 0) return;
 
-    const done = tasks.filter(t => t.completed).length;
-    const total = tasks.length;
-    const pct = Math.round((done / total) * 100);
+    const done    = tasks.filter(t => t.taskState === 1).length; // ✅ vert
+    const skipped = tasks.filter(t => t.taskState === 2).length; // ❌ rouge
+    const treated = done + skipped; // les deux comptent comme "traité"
+    const total   = tasks.length;
+    const pct     = Math.round((treated / total) * 100);
 
-    const wrap = document.getElementById(`${type}-progress-wrap`);
-    const fill = document.getElementById(`${type}-progress-fill`);
-    const text = document.getElementById(`${type}-progress-text`);
+    const wrap     = document.getElementById(`${type}-progress-wrap`);
+    const fill     = document.getElementById(`${type}-progress-fill`);
+    const text     = document.getElementById(`${type}-progress-text`);
     const emailBtn = document.getElementById(`${type}-email-btn`);
 
     wrap.style.display = 'block';
-    fill.style.width = pct + '%';
-    text.textContent = `${done} / ${total} tâches complétées`;
+    fill.style.width   = pct + '%';
+    text.textContent   = `${done} ✅ faites · ${skipped} ❌ non faites · ${total - treated} en attente`;
 
-    if (done === total && total > 0) {
+    // Bouton email visible seulement quand toutes les tâches sont traitées
+    if (treated === total && total > 0) {
         emailBtn.classList.add('visible');
     } else {
         emailBtn.classList.remove('visible');
@@ -2015,19 +2066,21 @@ async function sendEmail(type) {
     const empList = employees[type].map(e => `${e.name} (${formatDateFr(e.date)})`).join(', ');
     const today = formatDateFr(new Date().toISOString().split('T')[0]);
 
-    // Séparer les tâches complétées et non complétées
-    const tasksDone = tasks.filter(t => t.completed).map(t => t.texte);
-    const tasksNotDone = tasks.filter(t => !t.completed).map(t => t.texte);
+    // 3 états : 1 = ✅ fait, 2 = ❌ non fait, 0 = en attente
+    const tasksDone    = tasks.filter(t => (t.taskState ?? 0) === 1).map(t => t.texte);
+    const tasksNotDone = tasks.filter(t => (t.taskState ?? 0) === 2).map(t => t.texte);
+    const tasksPending = tasks.filter(t => (t.taskState ?? 0) === 0).map(t => t.texte);
 
     const payload = {
-        type,           // 'ouverture' ou 'fermeture'
-        label,          // 'Ouverture' ou 'Fermeture'
+        type,
+        label,
         emoji,
         employes: empList,
         date: today,
-        tachesFaites: tasksDone,
+        tachesFaites:    tasksDone,
         tachesNonFaites: tasksNotDone,
-        total: tasks.length,
+        tachesEnAttente: tasksPending,
+        total:     tasks.length,
         completees: tasksDone.length
     };
 
