@@ -737,6 +737,149 @@
             transform: scale(0.95);
         }
 
+        /* ---- ONGLET TEMPÉRATURES ---- */
+        .temp-period-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .temp-period-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #7f8c8d;
+        }
+        .temp-period-btn.active {
+            border-color: #4F6BED;
+            background: #4F6BED;
+            color: white;
+        }
+        .temp-lock-screen {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        .temp-form-wrapper { display: none; }
+        .temp-form-wrapper.unlocked { display: block; }
+        .temp-appareil-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border-left: 4px solid #4F6BED;
+            transition: all 0.2s;
+        }
+        .temp-appareil-card.alerte-danger { border-left-color: #e74c3c; background: #fff5f5; }
+        .temp-appareil-card.alerte-warning { border-left-color: #f1c40f; background: #fffdf0; }
+        .temp-appareil-card.alerte-ok { border-left-color: #2ecc71; }
+        .temp-appareil-name { font-size: 15px; font-weight: 700; color: #34495e; margin-bottom: 4px; }
+        .temp-appareil-norme { font-size: 11px; color: #95a5a6; margin-bottom: 12px; }
+        .temp-input-row { display: flex; align-items: center; gap: 10px; }
+        .temp-input {
+            width: 110px;
+            padding: 10px 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .temp-input:focus { outline: none; border-color: #4F6BED; }
+        .temp-unite { font-size: 16px; color: #7f8c8d; font-weight: 600; }
+        .temp-alerte-badge {
+            display: none;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+        .temp-alerte-badge.danger { display: inline-block; background: #ffebee; color: #e74c3c; }
+        .temp-alerte-badge.warning { display: inline-block; background: #fff9e6; color: #f39c12; }
+        .temp-alerte-badge.ok { display: inline-block; background: #e8f5e9; color: #27ae60; }
+        .temp-submit-btn {
+            background: linear-gradient(135deg, #4F6BED, #5B7EFF);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+            box-shadow: 0 4px 10px rgba(79,107,237,0.3);
+            transition: all 0.2s;
+        }
+        .temp-submit-btn:active { transform: scale(0.98); }
+        .temp-submit-btn:disabled { opacity: 0.6; }
+        .temp-historique-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #34495e;
+            margin: 20px 0 12px;
+            border-top: 1px solid #ecf0f1;
+            padding-top: 16px;
+        }
+        .temp-historique-card {
+            background: white;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .temp-historique-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .temp-historique-label { font-size: 13px; font-weight: 700; color: #4F6BED; }
+        .temp-historique-emp { font-size: 11px; color: #95a5a6; }
+        .temp-historique-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 13px;
+        }
+        .temp-historique-row:last-child { border-bottom: none; }
+        .temp-historique-appareil { color: #34495e; }
+        .temp-historique-val {
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+        .temp-historique-val.danger { background: #ffebee; color: #e74c3c; }
+        .temp-historique-val.warning { background: #fff9e6; color: #f39c12; }
+        .temp-historique-val.ok { background: #e8f5e9; color: #27ae60; }
+        .temp-historique-val.neutre { background: #f0f0f0; color: #7f8c8d; }
+        .temp-historique-row.danger { background: #fff5f5; border-radius: 6px; padding: 5px 8px; }
+        .temp-section-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #4F6BED;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 18px 0 8px;
+            padding: 6px 10px;
+            background: #EEF1FF;
+            border-radius: 8px;
+        }
+
 </style>
 </head>
 <body>
@@ -769,15 +912,13 @@
             <span class="tab-icon">🔄</span>
             Périodique
         </div>
+        <div class="tab" data-tab="temperatures">
+            <span class="tab-icon">🌡️</span>
+            Températures
+        </div>
     </div>
 
-    <!-- MICROSOFT FORM -->
-    <div class="form-link-card">
-        <div class="form-link-text">🌡️ Température Frigidaire / Congélateur</div>
-        <button class="form-link-btn" onclick="window.open('https://forms.office.com/r/CM9y3s8k8U', '_blank')">
-            Ouvrir
-        </button>
-    </div>
+
 
     <div class="content">
         <div class="tab-content active" id="ouverture-content">
@@ -866,6 +1007,212 @@
             <div class="section-title">🔄 Tâches Périodiques</div>
             <div id="periodique-list"><div class="loading">Chargement...</div></div>
         </div>
+        <div class="tab-content" id="temperatures-content">
+            <div class="section-title">🌡️ Relevé de Températures</div>
+
+            <!-- SÉLECTEUR MATIN / SOIR -->
+            <div class="temp-period-selector">
+                <button class="temp-period-btn active" id="btn-matin" onclick="selectPeriode('matin')">☀️ Matin — Ouverture</button>
+                <button class="temp-period-btn" id="btn-soir" onclick="selectPeriode('soir')">🌙 Soir — Fermeture</button>
+            </div>
+
+            <!-- ÉCRAN DE VERROUILLAGE -->
+            <div class="temp-lock-screen" id="temp-lock">
+                <div class="lock-screen-title">🔐 Identification requise</div>
+                <div class="lock-screen-subtitle">Entrez votre nom avant de commencer le relevé</div>
+                <div class="form-group">
+                    <label class="form-label">Nom de l'employé</label>
+                    <input type="text" class="form-input" id="temp-lock-name" placeholder="Votre prénom et nom">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="temp-lock-date">
+                </div>
+                <button class="lock-start-btn" onclick="unlockTemp()">✓ Commencer le relevé</button>
+            </div>
+
+            <!-- FORMULAIRE DE TEMPÉRATURES -->
+            <div class="temp-form-wrapper" id="temp-form-wrapper">
+                <div class="session-bar">
+                    <div class="session-bar-info" id="temp-session-info"></div>
+                    <button class="session-reset-btn" onclick="resetTempSession()">↩ Changer d'employé</button>
+                </div>
+
+                <!-- SECTION MACHINES À CRÈME -->
+                <div class="temp-section-label">🍦 Machines à crème</div>
+
+                <div class="temp-appareil-card" id="card-machine-creme-1">
+                    <div class="temp-appareil-name">Machine à crème 1</div>
+                    <div class="temp-appareil-norme">Norme : 4°C ou moins</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-machine-creme-1" placeholder="ex: 2.5" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-machine-creme-1', 'badge-machine-creme-1')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-machine-creme-1"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-machine-creme-2">
+                    <div class="temp-appareil-name">Machine à crème 2</div>
+                    <div class="temp-appareil-norme">Norme : 4°C ou moins</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-machine-creme-2" placeholder="ex: 2.5" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-machine-creme-2', 'badge-machine-creme-2')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-machine-creme-2"></span>
+                    </div>
+                </div>
+
+                <!-- SECTION TABLE FROIDE -->
+                <div class="temp-section-label">🧊 Tables & Présentoirs</div>
+
+                <div class="temp-appareil-card" id="card-table-froide">
+                    <div class="temp-appareil-name">Table froide</div>
+                    <div class="temp-appareil-norme">Norme : 4°C ou moins</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-table-froide" placeholder="ex: 3" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-table-froide', 'badge-table-froide')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-table-froide"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-presentoirs-gateaux">
+                    <div class="temp-appareil-name">Présentoirs à Gâteaux</div>
+                    <div class="temp-appareil-norme">Norme : 4°C ou moins</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-presentoirs-gateaux" placeholder="ex: 3" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-presentoirs-gateaux', 'badge-presentoirs-gateaux')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-presentoirs-gateaux"></span>
+                    </div>
+                </div>
+
+                <!-- SECTION FRIGIDAIRES -->
+                <div class="temp-section-label">🧊 Frigidaires — Norme : 4°C ou moins</div>
+
+                <div class="temp-appareil-card" id="card-frigo-1">
+                    <div class="temp-appareil-name">Frigidaire 1</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-frigo-1" placeholder="ex: 3" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-frigo-1', 'badge-frigo-1')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-frigo-1"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-frigo-2">
+                    <div class="temp-appareil-name">Frigidaire 2</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-frigo-2" placeholder="ex: 3" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-frigo-2', 'badge-frigo-2')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-frigo-2"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-frigo-3">
+                    <div class="temp-appareil-name">Frigidaire 3</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-frigo-3" placeholder="ex: 3" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-frigo-3', 'badge-frigo-3')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-frigo-3"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-frigo-4">
+                    <div class="temp-appareil-name">Frigidaire 4</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-frigo-4" placeholder="ex: 3" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-frigo-4', 'badge-frigo-4')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-frigo-4"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-frigo-5">
+                    <div class="temp-appareil-name">Frigidaire 5</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-frigo-5" placeholder="ex: 3" step="0.1"
+                               oninput="evalTemp(this, null, 4, 'card-frigo-5', 'badge-frigo-5')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-frigo-5"></span>
+                    </div>
+                </div>
+
+                <!-- SECTION CONGÉLATEURS -->
+                <div class="temp-section-label">❄️ Congélateurs — Norme : -18°C ou moins</div>
+
+                <div class="temp-appareil-card" id="card-congelateur-gelatos">
+                    <div class="temp-appareil-name">Congélateur à Gélatos</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-congelateur-gelatos" placeholder="ex: -20" step="0.1"
+                               oninput="evalTemp(this, null, -18, 'card-congelateur-gelatos', 'badge-congelateur-gelatos')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-congelateur-gelatos"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-congelateur-1">
+                    <div class="temp-appareil-name">Congélateur 1</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-congelateur-1" placeholder="ex: -20" step="0.1"
+                               oninput="evalTemp(this, null, -18, 'card-congelateur-1', 'badge-congelateur-1')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-congelateur-1"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-congelateur-2">
+                    <div class="temp-appareil-name">Congélateur 2</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-congelateur-2" placeholder="ex: -20" step="0.1"
+                               oninput="evalTemp(this, null, -18, 'card-congelateur-2', 'badge-congelateur-2')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-congelateur-2"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-congelateur-3">
+                    <div class="temp-appareil-name">Congélateur 3</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-congelateur-3" placeholder="ex: -20" step="0.1"
+                               oninput="evalTemp(this, null, -18, 'card-congelateur-3', 'badge-congelateur-3')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-congelateur-3"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-congelateur-4">
+                    <div class="temp-appareil-name">Congélateur 4</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-congelateur-4" placeholder="ex: -20" step="0.1"
+                               oninput="evalTemp(this, null, -18, 'card-congelateur-4', 'badge-congelateur-4')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-congelateur-4"></span>
+                    </div>
+                </div>
+
+                <div class="temp-appareil-card" id="card-congelateur-5">
+                    <div class="temp-appareil-name">Congélateur 5</div>
+                    <div class="temp-input-row">
+                        <input type="number" class="temp-input" id="temp-congelateur-5" placeholder="ex: -20" step="0.1"
+                               oninput="evalTemp(this, null, -18, 'card-congelateur-5', 'badge-congelateur-5')">
+                        <span class="temp-unite">°C</span>
+                        <span class="temp-alerte-badge" id="badge-congelateur-5"></span>
+                    </div>
+                </div>
+
+                <button class="temp-submit-btn" id="temp-submit-btn" onclick="soumettreTemperatures()">
+                    📧 Soumettre et envoyer par email
+                </button>
+
+                <!-- Historique du jour -->
+                <div id="temp-historique-wrap"></div>
+            </div>
+        </div>
+
     </div>
 
     <div class="popup-overlay" id="codePinPopup">
@@ -1710,6 +2057,202 @@ async function sendEmail(type) {
 
 // ========= FIN EMPLOYÉS & VERROUILLAGE =========
 
+
+// ========= TEMPÉRATURES =========
+
+const SCRIPT_URL_TEMPERATURES = 'https://script.google.com/macros/s/AKfycbxTHdq8_IH7YT7eTPB2hRUlKxY3C2Omn5xGRC-CZeoMfPELxO2bIB0J3V6P19c6FMlA/exec';
+
+let tempEmployee = { name: '', date: '' };
+let tempPeriode = 'matin';
+let tempHistorique = JSON.parse(localStorage.getItem('tempHistorique') || '[]');
+
+// Liste complète des 15 appareils avec leurs normes
+// max = seuil d'alerte (frigidaire > 4°C = rouge, congélateur > -18°C = rouge)
+const APPAREILS = [
+    { id: 'machine-creme-1',      nom: 'Machine à crème 1',      type: 'frigo',     max: 4   },
+    { id: 'machine-creme-2',      nom: 'Machine à crème 2',      type: 'frigo',     max: 4   },
+    { id: 'table-froide',         nom: 'Table froide',            type: 'frigo',     max: 4   },
+    { id: 'presentoirs-gateaux',  nom: 'Présentoirs à Gâteaux',  type: 'frigo',     max: 4   },
+    { id: 'frigo-1',              nom: 'Frigidaire 1',            type: 'frigo',     max: 4   },
+    { id: 'frigo-2',              nom: 'Frigidaire 2',            type: 'frigo',     max: 4   },
+    { id: 'frigo-3',              nom: 'Frigidaire 3',            type: 'frigo',     max: 4   },
+    { id: 'frigo-4',              nom: 'Frigidaire 4',            type: 'frigo',     max: 4   },
+    { id: 'frigo-5',              nom: 'Frigidaire 5',            type: 'frigo',     max: 4   },
+    { id: 'congelateur-gelatos',  nom: 'Congélateur à Gélatos',  type: 'congelateur', max: -18 },
+    { id: 'congelateur-1',        nom: 'Congélateur 1',          type: 'congelateur', max: -18 },
+    { id: 'congelateur-2',        nom: 'Congélateur 2',          type: 'congelateur', max: -18 },
+    { id: 'congelateur-3',        nom: 'Congélateur 3',          type: 'congelateur', max: -18 },
+    { id: 'congelateur-4',        nom: 'Congélateur 4',          type: 'congelateur', max: -18 },
+    { id: 'congelateur-5',        nom: 'Congélateur 5',          type: 'congelateur', max: -18 },
+];
+
+function selectPeriode(p) {
+    tempPeriode = p;
+    document.getElementById('btn-matin').classList.toggle('active', p === 'matin');
+    document.getElementById('btn-soir').classList.toggle('active',  p === 'soir');
+}
+
+function unlockTemp() {
+    const name = document.getElementById('temp-lock-name').value.trim();
+    const date = document.getElementById('temp-lock-date').value;
+    if (!name) { showNotification('Veuillez entrer un nom', true); return; }
+    if (!date) { showNotification('Veuillez choisir une date', true); return; }
+
+    tempEmployee = { name, date };
+    const label = tempPeriode === 'matin' ? '☀️ Matin — Ouverture' : '🌙 Soir — Fermeture';
+    document.getElementById('temp-session-info').textContent =
+        '👤 ' + name + ' (' + formatDateFr(date) + ') — ' + label;
+
+    document.getElementById('temp-lock').style.display = 'none';
+    document.getElementById('temp-form-wrapper').classList.add('unlocked');
+    renderTempHistorique();
+}
+
+function resetTempSession() {
+    tempEmployee = { name: '', date: '' };
+    document.getElementById('temp-lock').style.display = 'block';
+    document.getElementById('temp-form-wrapper').classList.remove('unlocked');
+    document.getElementById('temp-lock-name').value = '';
+    APPAREILS.forEach(a => {
+        const input = document.getElementById('temp-' + a.id);
+        if (input) input.value = '';
+        const card = document.getElementById('card-' + a.id);
+        if (card) card.className = 'temp-appareil-card';
+        const badge = document.getElementById('badge-' + a.id);
+        if (badge) { badge.className = 'temp-alerte-badge'; badge.textContent = ''; }
+    });
+}
+
+function evalTemp(input, min, max, cardId, badgeId) {
+    const val  = parseFloat(input.value);
+    const card  = document.getElementById(cardId);
+    const badge = document.getElementById(badgeId);
+
+    if (input.value === '' || isNaN(val)) {
+        card.className  = 'temp-appareil-card';
+        badge.className = 'temp-alerte-badge';
+        badge.textContent = '';
+        return;
+    }
+
+    // Rouge si : frigidaire > 4°C  OU  congélateur > -18°C
+    const enAlerte = (max !== null && val > max);
+
+    if (enAlerte) {
+        card.className    = 'temp-appareil-card alerte-danger';
+        badge.className   = 'temp-alerte-badge danger';
+        badge.textContent = '🚨 HORS NORME';
+    } else {
+        card.className    = 'temp-appareil-card alerte-ok';
+        badge.className   = 'temp-alerte-badge ok';
+        badge.textContent = '✅ Normal';
+    }
+}
+
+function getStatutTemp(val, max) {
+    if (val === null || isNaN(val)) return 'neutre';
+    return (max !== null && val > max) ? 'danger' : 'ok';
+}
+
+async function soumettreTemperatures() {
+    const releve = APPAREILS.map(a => {
+        const raw = document.getElementById('temp-' + a.id).value;
+        const val = raw !== '' ? parseFloat(raw) : null;
+        return {
+            id:     a.id,
+            nom:    a.nom,
+            type:   a.type,
+            valeur: val,
+            max:    a.max,
+            statut: val !== null ? getStatutTemp(val, a.max) : 'neutre'
+        };
+    });
+
+    if (releve.every(r => r.valeur === null)) {
+        showNotification('Entrez au moins une température', true);
+        return;
+    }
+
+    const btn = document.getElementById('temp-submit-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Envoi en cours...';
+
+    const periode = tempPeriode === 'matin' ? 'Matin ☀️ — Ouverture' : 'Soir 🌙 — Fermeture';
+    const payload = {
+        employe: tempEmployee.name,
+        date:    formatDateFr(tempEmployee.date),
+        periode,
+        releve
+    };
+
+    // Sauvegarder dans l'historique local
+    const entree = { ...payload, horodatage: new Date().toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' }) };
+    tempHistorique.unshift(entree);
+    if (tempHistorique.length > 10) tempHistorique = tempHistorique.slice(0, 10);
+    localStorage.setItem('tempHistorique', JSON.stringify(tempHistorique));
+
+    try {
+        const response = await fetch(SCRIPT_URL_TEMPERATURES, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (result.status === 'ok') {
+            showNotification('✅ Relevé envoyé avec succès !');
+            // Vider les champs après envoi réussi
+            APPAREILS.forEach(a => {
+                const input = document.getElementById('temp-' + a.id);
+                if (input) input.value = '';
+                const card = document.getElementById('card-' + a.id);
+                if (card) card.className = 'temp-appareil-card';
+                const badge = document.getElementById('badge-' + a.id);
+                if (badge) { badge.className = 'temp-alerte-badge'; badge.textContent = ''; }
+            });
+            renderTempHistorique();
+        } else {
+            throw new Error(result.message || 'Erreur inconnue');
+        }
+    } catch (error) {
+        console.error('Erreur envoi températures:', error);
+        showNotification('❌ Erreur lors de l\'envoi', true);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '📧 Soumettre et envoyer par email';
+    }
+}
+
+function renderTempHistorique() {
+    const wrap = document.getElementById('temp-historique-wrap');
+    if (!wrap) return;
+    if (tempHistorique.length === 0) { wrap.innerHTML = ''; return; }
+
+    let html = '<div class="temp-historique-title">📋 Historique du jour</div>';
+    tempHistorique.forEach(e => {
+        html += '<div class="temp-historique-card">';
+        html += '<div class="temp-historique-header">';
+        html += '<span class="temp-historique-label">' + e.periode + ' — ' + e.date + '</span>';
+        html += '<span class="temp-historique-emp">👤 ' + e.employe + (e.horodatage ? ' · ' + e.horodatage : '') + '</span>';
+        html += '</div>';
+        e.releve.forEach(r => {
+            if (r.valeur === null) return;
+            html += '<div class="temp-historique-row ' + r.statut + '">';
+            html += '<span class="temp-historique-appareil">' + r.nom + '</span>';
+            html += '<span class="temp-historique-val ' + r.statut + '">' + r.valeur + '°C ' + (r.statut === 'danger' ? '🚨' : '✅') + '</span>';
+            html += '</div>';
+        });
+        html += '</div>';
+    });
+    wrap.innerHTML = html;
+}
+
+window.selectPeriode = selectPeriode;
+window.unlockTemp    = unlockTemp;
+window.resetTempSession = resetTempSession;
+window.evalTemp      = evalTemp;
+window.soumettreTemperatures = soumettreTemperatures;
+
+// ========= FIN TEMPÉRATURES =========
 async function init() {
     updateSyncStatus('Chargement...', false);
     
@@ -1773,6 +2316,7 @@ window.sendEmail = sendEmail;
 const todayVal = new Date().toISOString().split('T')[0];
 document.getElementById('ouverture-lock-date').value = todayVal;
 document.getElementById('fermeture-lock-date').value = todayVal;
+document.getElementById('temp-lock-date').value = todayVal;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
