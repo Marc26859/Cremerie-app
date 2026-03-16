@@ -1647,7 +1647,11 @@ function updateProgress(type) {
     }
 }
 
-function sendEmail(type) {
+// ⚙️ Collez ici l'URL de chaque déploiement Google Apps Script
+const SCRIPT_URL_OUVERTURE = 'https://script.google.com/macros/s/AKfycbwDDN9YrNc_OH93lHAltYDzhjWM2BanmVyRB4muDPkeem3gUBCBW0Z0uhI4eTc5k7kK/exec';
+const SCRIPT_URL_FERMETURE = 'https://script.google.com/macros/s/AKfycbxXKzRsJk7utJqoeFD6aOBURJpNMuK06v8p9hAdDFy3LpZfo_IMVVT38_VpF38zb09_4Q/exec';
+
+async function sendEmail(type) {
     const tasks = type === 'ouverture' ? state.tachesOuverture : state.tachesFermeture;
     const label = type === 'ouverture' ? 'Ouverture' : 'Fermeture';
     const emoji = type === 'ouverture' ? '☀️' : '🌙';
@@ -1657,25 +1661,51 @@ function sendEmail(type) {
         return;
     }
 
+    const btn = document.getElementById(`${type}-email-btn`);
+    btn.disabled = true;
+    btn.textContent = '⏳ Envoi en cours...';
+
     const empList = employees[type].map(e => `${e.name} (${formatDateFr(e.date)})`).join(', ');
     const today = formatDateFr(new Date().toISOString().split('T')[0]);
-    const taskLines = tasks.map(t => `${t.completed ? '✅' : '❌'} ${t.texte}`).join('\n');
 
-    const subject = encodeURIComponent(`${emoji} Liste ${label} — ${today}`);
-    const body = encodeURIComponent(
-`${emoji} LISTE DE ${label.toUpperCase()} — ${today}
-${'='.repeat(40)}
+    // Séparer les tâches complétées et non complétées
+    const tasksDone = tasks.filter(t => t.completed).map(t => t.texte);
+    const tasksNotDone = tasks.filter(t => !t.completed).map(t => t.texte);
 
-👤 Employé(s): ${empList}
+    const payload = {
+        type,           // 'ouverture' ou 'fermeture'
+        label,          // 'Ouverture' ou 'Fermeture'
+        emoji,
+        employes: empList,
+        date: today,
+        tachesFaites: tasksDone,
+        tachesNonFaites: tasksNotDone,
+        total: tasks.length,
+        completees: tasksDone.length
+    };
 
-📋 TÂCHES:
-${taskLines}
+    try {
+        const scriptUrl = type === 'ouverture' ? SCRIPT_URL_OUVERTURE : SCRIPT_URL_FERMETURE;
+        const response = await fetch(scriptUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' }, // text/plain évite le preflight CORS
+            body: JSON.stringify(payload)
+        });
 
-${'='.repeat(40)}
-Envoyé depuis l'application Bar Laitier`
-    );
+        const result = await response.json();
 
-    window.location.href = `mailto:cremeetcie@formationlangevin.com?subject=${subject}&body=${body}`;
+        if (result.status === 'ok') {
+            showNotification(`✅ Email ${label} envoyé avec succès !`);
+        } else {
+            throw new Error(result.message || 'Erreur inconnue');
+        }
+    } catch (error) {
+        console.error('Erreur envoi email:', error);
+        showNotification('❌ Erreur lors de l\'envoi. Vérifiez l\'URL du script.', true);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '📧 Envoyer la liste complétée par email';
+    }
 }
 
 // ========= FIN EMPLOYÉS & VERROUILLAGE =========
