@@ -917,15 +917,229 @@
             border-radius: 8px;
         }
 
+        /* ========= ÉCRAN DE CONNEXION ========= */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #4F6BED 0%, #3a56d4 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-overlay.hidden { display: none; }
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 30px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .login-logo { text-align: center; font-size: 48px; margin-bottom: 8px; }
+        .login-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: #34495e;
+            margin-bottom: 4px;
+        }
+        .login-subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #95a5a6;
+            margin-bottom: 28px;
+        }
+        .login-field { margin-bottom: 16px; }
+        .login-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #7f8c8d;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .login-field input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .login-field input:focus { outline: none; border-color: #4F6BED; }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4F6BED, #3a56d4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 4px 15px rgba(79,107,237,0.4);
+            transition: all 0.2s;
+        }
+        .login-btn:active { transform: scale(0.98); }
+        .login-error {
+            background: #ffebee;
+            color: #e74c3c;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 12px;
+            text-align: center;
+            display: none;
+        }
+        .login-error.visible { display: block; }
+
+        /* ========= ONGLET ÉQUIPE ========= */
+        .equipe-add-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid #4F6BED;
+        }
+        .equipe-add-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #4F6BED;
+            margin-bottom: 15px;
+        }
+        .equipe-user-card {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .equipe-user-card.master-card { border-left: 4px solid #f39c12; }
+        .equipe-user-card.employe-card { border-left: 4px solid #2ecc71; }
+        .equipe-user-card.hardcoded-card { border-left: 4px solid #95a5a6; opacity: 0.7; }
+        .equipe-user-info { flex: 1; }
+        .equipe-user-name { font-size: 15px; font-weight: 700; color: #34495e; }
+        .equipe-user-meta { font-size: 11px; color: #95a5a6; margin-top: 2px; }
+        .equipe-role-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+        .equipe-role-badge.master { background: #fff3cd; color: #f39c12; }
+        .equipe-role-badge.employe { background: #e8f5e9; color: #27ae60; }
+        .equipe-delete-btn {
+            background: none;
+            border: 1.5px solid #e74c3c;
+            color: #e74c3c;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .equipe-edit-btn {
+            background: none;
+            border: 1.5px solid #4F6BED;
+            color: #4F6BED;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .equipe-edit-form {
+            margin-bottom: 10px;
+        }
+        .equipe-edit-inner {
+            background: #f8f9ff;
+            border: 2px solid #4F6BED;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .equipe-edit-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #4F6BED;
+            margin-bottom: 12px;
+        }
+        .equipe-section-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 15px 0 8px;
+        }
+        .user-info-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .user-info-name {
+            font-size: 11px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1.5px solid rgba(255,255,255,0.5);
+            border-radius: 15px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
 </style>
 </head>
 <body>
+    <!-- ========= ÉCRAN DE CONNEXION ========= -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <div class="login-logo">🍦</div>
+            <div class="login-title">Bar Laitier</div>
+            <div class="login-subtitle">Connectez-vous pour continuer</div>
+            <div class="login-field">
+                <label>Prénom</label>
+                <input type="text" id="loginUsername" placeholder="Votre prénom" autocomplete="username">
+            </div>
+            <div class="login-field">
+                <label>Mot de passe</label>
+                <input type="password" id="loginPassword" placeholder="••••" maxlength="6" inputmode="numeric" autocomplete="current-password">
+            </div>
+            <button class="login-btn" id="loginBtn">Se connecter</button>
+            <div class="login-error" id="loginError">❌ Nom ou mot de passe incorrect</div>
+        </div>
+    </div>
+    <!-- ========= FIN CONNEXION ========= -->
+
     <div class="header">
         <div>
             <div class="app-title">🍦 Bar Laitier</div>
             <div class="sync-status" id="syncStatus">Synchronisation...</div>
         </div>
-        <button class="supervisor-btn" id="supervisorBtn">👤 Employé</button>
+        <div class="user-info-bar">
+            <span class="user-info-name" id="userDisplayName"></span>
+            <button class="supervisor-btn" id="supervisorBtn" style="display:none;">👤 Superviseur</button>
+            <button class="logout-btn" id="logoutBtn">Déconnexion</button>
+        </div>
     </div>
 
     <div class="tabs">
@@ -952,6 +1166,10 @@
         <div class="tab" data-tab="temperatures">
             <span class="tab-icon">🌡️</span>
             Températures
+        </div>
+        <div class="tab" data-tab="equipe" id="equipe-tab" style="display:none;">
+            <span class="tab-icon">👥</span>
+            Équipe
         </div>
     </div>
 
@@ -1250,6 +1468,32 @@
             </div>
         </div>
 
+        <!-- ========= ONGLET ÉQUIPE ========= -->
+        <div class="tab-content" id="equipe-content">
+            <div class="section-title">👥 Gestion de l'équipe</div>
+            <div class="equipe-add-card">
+                <div class="equipe-add-title">➕ Ajouter un employé</div>
+                <div class="form-group">
+                    <label class="form-label">Prénom et nom</label>
+                    <input type="text" class="form-input" id="equipe-new-username" placeholder="Ex: Marie Tremblay">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe (4 chiffres)</label>
+                    <input type="password" class="form-input" id="equipe-new-password" placeholder="••••" maxlength="4" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rôle</label>
+                    <select class="form-input" id="equipe-new-role">
+                        <option value="employe">Employé</option>
+                        <option value="master">Master (accès complet)</option>
+                    </select>
+                </div>
+                <button class="lock-start-btn" onclick="window.equipeAjouterUser()">✅ Ajouter l'employé</button>
+            </div>
+            <div id="equipe-list-wrap"></div>
+        </div>
+        <!-- ========= FIN ÉQUIPE ========= -->
+
     </div>
 
     <div class="popup-overlay" id="codePinPopup">
@@ -1305,6 +1549,381 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const SUPERVISOR_CODE = '1234';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Sécurité : échappement HTML pour prévenir les injections XSS
+function escHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str ?? '';
+    return d.innerHTML;
+}
+
+// Hachage SHA-256 via Web Crypto API (natif dans tous les navigateurs modernes)
+async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ========= SYSTÈME DE CONNEXION =========
+// Rôles : 'master' = accès total + superviseur auto
+//         'employe' = listes (lecture + cocher) + gelatos complets
+
+let currentUser = null; // { username, role }
+
+async function loginUser(username, password) {
+    const hashed = await sha256(password);
+    const u = getAllUsers().find(u =>
+        u.username.split(' ')[0].toLowerCase().trim() === username.toLowerCase().trim() &&
+        u.password === hashed
+    );
+    return u || null;
+}
+
+function applyUserPermissions() {
+    const isMaster = currentUser?.role === 'master';
+
+    // Bouton superviseur : visible seulement pour master
+    const supervisorBtn = document.getElementById('supervisorBtn');
+    if (supervisorBtn) supervisorBtn.style.display = isMaster ? 'block' : 'none';
+
+    // Onglet Équipe : visible seulement pour master
+    const equipeTab = document.getElementById('equipe-tab');
+    if (equipeTab) equipeTab.style.display = isMaster ? 'flex' : 'none';
+
+    // Mode superviseur auto pour master
+    if (isMaster) {
+        state.isSupervisor = true;
+        updateSupervisorButton();
+    } else {
+        state.isSupervisor = false;
+        updateSupervisorButton();
+    }
+
+    // Bouton "Ajouter un gelato" : visible pour tous
+    const addGelatoBtn = document.getElementById('addGelatoBtn');
+    if (addGelatoBtn) addGelatoBtn.style.display = 'block';
+}
+
+function showLoginError() {
+    const err = document.getElementById('loginError');
+    err.classList.add('visible');
+    setTimeout(() => err.classList.remove('visible'), 3000);
+}
+
+let _loginAttempts = 0;
+let _loginLockUntil = 0;
+
+async function handleLogin() {
+    if (Date.now() < _loginLockUntil) {
+        const secs = Math.ceil((_loginLockUntil - Date.now()) / 1000);
+        document.getElementById('loginError').textContent = `🔒 Trop de tentatives. Attendez ${secs}s`;
+        document.getElementById('loginError').classList.add('visible');
+        return;
+    }
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const user = await loginUser(username, password);
+    if (user) {
+        _loginAttempts = 0;
+        currentUser = { username: user.username, role: user.role };
+        document.getElementById('loginOverlay').classList.add('hidden');
+        document.getElementById('userDisplayName').textContent = '👤 ' + user.username.split(' ')[0];
+        document.getElementById('loginPassword').value = '';
+        applyUserPermissions();
+        showNotification('Bienvenue ' + user.username.split(' ')[0] + ' ! 👋');
+    } else {
+        _loginAttempts++;
+        if (_loginAttempts >= 5) {
+            _loginLockUntil = Date.now() + 60000;
+            _loginAttempts = 0;
+            document.getElementById('loginError').textContent = '🔒 5 tentatives échouées. Bloqué 60s';
+        } else {
+            document.getElementById('loginError').textContent = '❌ Nom ou mot de passe incorrect';
+        }
+        document.getElementById('loginError').classList.add('visible');
+        setTimeout(() => document.getElementById('loginError').classList.remove('visible'), 3000);
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
+    }
+}
+
+function handleLogout() {
+    currentUser = null;
+    state.isSupervisor = false;
+    document.getElementById('loginOverlay').classList.remove('hidden');
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('userDisplayName').textContent = '';
+    const equipeTab = document.getElementById('equipe-tab');
+    if (equipeTab) equipeTab.style.display = 'none';
+    updateSupervisorButton();
+    setTimeout(() => document.getElementById('loginUsername').focus(), 100);
+}
+// ========= FIN CONNEXION =========
+
+// ========= GESTION ÉQUIPE =========
+const USERS_HARDCODED = [
+    { username: 'Marc-Antoine Langevin', password: '56a3a46a3ba4fb713fd3e4cfa51a5748abf2c2662fefb0b5a863fdef34572255', role: 'master' },
+    { username: 'Raphael Langevin',      password: '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', role: 'master' },
+    { username: 'Oceanne Castonguay',    password: '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', role: 'employe' },
+];
+
+function getStoredUsers() {
+    try { return JSON.parse(localStorage.getItem('equipe_users') || '[]'); } catch { return []; }
+}
+
+function saveStoredUsers(arr) {
+    localStorage.setItem('equipe_users', JSON.stringify(arr));
+}
+
+// Migration : hacher les MDP en clair qui traînent encore en localStorage
+async function migrateStoredPasswords() {
+    const stored = getStoredUsers();
+    let changed = false;
+    for (const u of stored) {
+        if (/^\d{4}$/.test(u.password)) {
+            u.password = await sha256(u.password);
+            changed = true;
+        }
+    }
+    if (changed) saveStoredUsers(stored);
+
+    // Idem pour les overrides hardcoded
+    const overrides = getHardcodedOverrides();
+    let changedOv = false;
+    for (const key of Object.keys(overrides)) {
+        if (overrides[key].password && /^\d{4}$/.test(overrides[key].password)) {
+            overrides[key].password = await sha256(overrides[key].password);
+            changedOv = true;
+        }
+    }
+    if (changedOv) saveHardcodedOverrides(overrides);
+}
+
+// Merge : hardcoded + localStorage — défini après getEffectiveHardcoded() ci-dessous
+
+function renderEquipe() {
+    const wrap = document.getElementById('equipe-list-wrap');
+    if (!wrap) return;
+    const stored = getStoredUsers();
+    const hardcoded = getEffectiveHardcoded();
+    let html = '';
+
+    // Utilisateurs fixes
+    html += '<div class="equipe-section-label">Comptes fixes</div>';
+    hardcoded.forEach((u, idx) => {
+        const prenom = u.username.split(' ')[0];
+        html += `<div class="equipe-user-card hardcoded-card" id="equipe-hcard-${idx}">
+            <div class="equipe-user-info">
+                <div class="equipe-user-name">${escHtml(prenom)}</div>
+                <div class="equipe-user-meta">${escHtml(u.username)}</div>
+            </div>
+            <span class="equipe-role-badge ${u.role}">${u.role === 'master' ? '⭐ Master' : '👤 Employé'}</span>
+            <button class="equipe-edit-btn" onclick="window.equipeOuvrirEdit('hardcoded', ${idx})">✏️</button>
+        </div>
+        <div class="equipe-edit-form" id="equipe-hedit-${idx}" style="display:none;">
+            <div class="equipe-edit-inner">
+                <div class="equipe-edit-title">✏️ Modifier ${escHtml(prenom)}</div>
+                <div class="form-group">
+                    <label class="form-label">Prénom et nom</label>
+                    <input type="text" class="form-input" id="equipe-hedit-name-${idx}" value="${escHtml(u.username)}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nouveau mot de passe (4 chiffres)</label>
+                    <input type="password" class="form-input" id="equipe-hedit-pw-${idx}" placeholder="Laisser vide = inchangé" maxlength="4" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rôle</label>
+                    <select class="form-input" id="equipe-hedit-role-${idx}">
+                        <option value="employe" ${u.role === 'employe' ? 'selected' : ''}>Employé</option>
+                        <option value="master"  ${u.role === 'master'  ? 'selected' : ''}>Master</option>
+                    </select>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:10px;">
+                    <button class="lock-start-btn" style="flex:2;" onclick="window.equipeSauvegarderEdit('hardcoded', ${idx})">✅ Sauvegarder</button>
+                    <button class="equipe-delete-btn" style="flex:1;padding:10px;" onclick="window.equipeAnnulerEdit('hardcoded', ${idx})">Annuler</button>
+                </div>
+            </div>
+        </div>`;
+    });
+
+    // Utilisateurs ajoutés
+    html += '<div class="equipe-section-label" style="margin-top:18px;">Employés ajoutés</div>';
+    if (stored.length > 0) {
+        stored.forEach((u, idx) => {
+            const prenom = u.username.split(' ')[0];
+            html += `<div class="equipe-user-card ${u.role}-card" id="equipe-scard-${idx}">
+                <div class="equipe-user-info">
+                    <div class="equipe-user-name">${escHtml(prenom)}</div>
+                    <div class="equipe-user-meta">${escHtml(u.username)}</div>
+                </div>
+                <span class="equipe-role-badge ${u.role}">${u.role === 'master' ? '⭐ Master' : '👤 Employé'}</span>
+                <button class="equipe-edit-btn" onclick="window.equipeOuvrirEdit('stored', ${idx})">✏️</button>
+                <button class="equipe-delete-btn" onclick="window.equipeSupprimerUser(${idx})">🗑️</button>
+            </div>
+            <div class="equipe-edit-form" id="equipe-sedit-${idx}" style="display:none;">
+                <div class="equipe-edit-inner">
+                    <div class="equipe-edit-title">✏️ Modifier ${escHtml(prenom)}</div>
+                    <div class="form-group">
+                        <label class="form-label">Prénom et nom</label>
+                        <input type="text" class="form-input" id="equipe-sedit-name-${idx}" value="${escHtml(u.username)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nouveau mot de passe (4 chiffres)</label>
+                        <input type="password" class="form-input" id="equipe-sedit-pw-${idx}" placeholder="Laisser vide = inchangé" maxlength="4" inputmode="numeric">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Rôle</label>
+                        <select class="form-input" id="equipe-sedit-role-${idx}">
+                            <option value="employe" ${u.role === 'employe' ? 'selected' : ''}>Employé</option>
+                            <option value="master"  ${u.role === 'master'  ? 'selected' : ''}>Master</option>
+                        </select>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        <button class="lock-start-btn" style="flex:2;" onclick="window.equipeSauvegarderEdit('stored', ${idx})">✅ Sauvegarder</button>
+                        <button class="equipe-delete-btn" style="flex:1;padding:10px;" onclick="window.equipeAnnulerEdit('stored', ${idx})">Annuler</button>
+                    </div>
+                </div>
+            </div>`;
+        });
+    } else {
+        html += '<div style="color:#95a5a6; font-size:13px; padding: 10px 0;">Aucun employé ajouté pour l\'instant.</div>';
+    }
+
+    wrap.innerHTML = html;
+}
+
+// Stockage des overrides pour les hardcoded
+function getHardcodedOverrides() {
+    try { return JSON.parse(localStorage.getItem('equipe_hardcoded_overrides') || '{}'); } catch { return {}; }
+}
+function saveHardcodedOverrides(obj) {
+    localStorage.setItem('equipe_hardcoded_overrides', JSON.stringify(obj));
+}
+
+// Vider les overrides si ils contiennent des mots de passe en clair (migration)
+function migrateOverrides() {
+    const overrides = getHardcodedOverrides();
+    let changed = false;
+    Object.keys(overrides).forEach(k => {
+        if (overrides[k].password && overrides[k].password.length < 20) {
+            delete overrides[k].password; // Supprimer le MDP en clair, le hash du USERS_HARDCODED sera utilisé
+            changed = true;
+        }
+    });
+    if (changed) saveHardcodedOverrides(overrides);
+
+    // Même chose pour les stored users
+    const stored = getStoredUsers();
+    let storedChanged = false;
+    stored.forEach(u => {
+        if (u.password && u.password.length < 20) {
+            u.password = ''; // sera inutilisable, forçant un reset
+            storedChanged = true;
+        }
+    });
+    if (storedChanged) saveStoredUsers(stored);
+}
+migrateOverrides();
+
+// Fusionner overrides dans USERS_HARDCODED au runtime
+function getEffectiveHardcoded() {
+    const overrides = getHardcodedOverrides();
+    return USERS_HARDCODED.map((u, idx) => overrides[idx] ? { ...u, ...overrides[idx] } : u);
+}
+
+// Réécrire getAllUsers pour tenir compte des overrides
+function getAllUsers() {
+    return [...getEffectiveHardcoded(), ...getStoredUsers()];
+}
+
+function equipeOuvrirEdit(type, idx) {
+    const formId = type === 'hardcoded' ? `equipe-hedit-${idx}` : `equipe-sedit-${idx}`;
+    const cardId = type === 'hardcoded' ? `equipe-hcard-${idx}` : `equipe-scard-${idx}`;
+    document.getElementById(formId).style.display = 'block';
+    document.getElementById(cardId).style.display = 'none';
+}
+
+function equipeAnnulerEdit(type, idx) {
+    const formId = type === 'hardcoded' ? `equipe-hedit-${idx}` : `equipe-sedit-${idx}`;
+    const cardId = type === 'hardcoded' ? `equipe-hcard-${idx}` : `equipe-scard-${idx}`;
+    document.getElementById(formId).style.display = 'none';
+    document.getElementById(cardId).style.display = 'flex';
+}
+
+async function equipeSauvegarderEdit(type, idx) {
+    const prefix = type === 'hardcoded' ? `equipe-hedit` : `equipe-sedit`;
+    const newName = document.getElementById(`${prefix}-name-${idx}`).value.trim();
+    const newPw   = document.getElementById(`${prefix}-pw-${idx}`).value.trim();
+    const newRole = document.getElementById(`${prefix}-role-${idx}`).value;
+
+    if (!newName) { showNotification('Le nom ne peut pas être vide', true); return; }
+    if (newPw && !/^\d{4}$/.test(newPw)) { showNotification('Mot de passe : 4 chiffres requis', true); return; }
+
+    const newPwHashed = newPw ? await sha256(newPw) : null;
+
+    if (type === 'hardcoded') {
+        const overrides = getHardcodedOverrides();
+        const original  = USERS_HARDCODED[idx];
+        overrides[idx] = {
+            username: newName,
+            password: newPwHashed || (overrides[idx]?.password || original.password),
+            role: newRole
+        };
+        saveHardcodedOverrides(overrides);
+    } else {
+        const stored = getStoredUsers();
+        stored[idx].username = newName;
+        if (newPwHashed) stored[idx].password = newPwHashed;
+        stored[idx].role = newRole;
+        saveStoredUsers(stored);
+    }
+
+    renderEquipe();
+    showNotification('✅ Modifications sauvegardées !');
+}
+
+async function equipeAjouterUser() {
+    const username = document.getElementById('equipe-new-username').value.trim();
+    const password = document.getElementById('equipe-new-password').value.trim();
+    const role     = document.getElementById('equipe-new-role').value;
+
+    if (!username) { showNotification('Entrez un prénom et nom', true); return; }
+    if (!/^\d{4}$/.test(password)) { showNotification('Le mot de passe doit être 4 chiffres', true); return; }
+
+    // Vérifier doublon (par prénom)
+    const prenom = username.split(' ')[0].toLowerCase();
+    const doublon = getAllUsers().find(u => u.username.split(' ')[0].toLowerCase() === prenom);
+    if (doublon) { showNotification('Ce prénom existe déjà', true); return; }
+
+    const hashed = await sha256(password);
+    const stored = getStoredUsers();
+    stored.push({ username, password: hashed, role });
+    saveStoredUsers(stored);
+
+    document.getElementById('equipe-new-username').value = '';
+    document.getElementById('equipe-new-password').value = '';
+    document.getElementById('equipe-new-role').value = 'employe';
+
+    renderEquipe();
+    showNotification('✅ Employé ajouté !');
+}
+
+function equipeSupprimerUser(idx) {
+    const stored = getStoredUsers();
+    const u = stored[idx];
+    if (!u) return;
+    if (!confirm(`Supprimer ${u.username} ?`)) return;
+    stored.splice(idx, 1);
+    saveStoredUsers(stored);
+    renderEquipe();
+    showNotification('Employé supprimé');
+}
+
+window.equipeAjouterUser    = equipeAjouterUser;
+window.equipeSupprimerUser  = equipeSupprimerUser;
+window.equipeOuvrirEdit     = equipeOuvrirEdit;
+window.equipeAnnulerEdit    = equipeAnnulerEdit;
+window.equipeSauvegarderEdit = equipeSauvegarderEdit;
 
 let state = {
     isSupervisor: false,
@@ -1435,7 +2054,7 @@ function renderTaskList(tasks, containerId) {
         <div class="${itemClass}" id="task-item-${task.id}">
             <button class="${btnClass}" onclick="window.toggleTask('${containerId}', ${task.id})">${btnIcon}</button>
             <div class="${textClass}">
-                ${task.texte}${task.frequence ? ` <span style="color: #3498db; font-size: 11px;">(${task.frequence})</span>` : ''}
+                ${escHtml(task.texte)}${task.frequence ? ` <span style="color: #3498db; font-size: 11px;">(${escHtml(task.frequence)})</span>` : ''}
             </div>
             ${state.isSupervisor ? `
                 <div style="display: flex; gap: 5px; margin-left: auto; flex-shrink: 0;">
@@ -1623,9 +2242,9 @@ function renderGelatos() {
         
         return `
             <div class="gelato-card ${urgency}">
-                <div class="gelato-name">${gelato.nom}</div>
-                <div class="gelato-info">Créé par: ${gelato.cree_par}</div>
-                <div class="gelato-dates">📅 Production: ${formatDate(gelato.date_production)} | Comptoir: ${comptoirText}</div>
+                <div class="gelato-name">${escHtml(gelato.nom)}</div>
+                <div class="gelato-info">Créé par: ${escHtml(gelato.cree_par)}</div>
+                <div class="gelato-dates">📅 Production: ${formatDate(gelato.date_production)} | Comptoir: ${escHtml(comptoirText)}</div>
                 ${peremptionText}
                 <div class="gelato-actions">
                     <button class="btn-edit" onclick="window.editGelato(${gelato.id})">✏️ Modifier</button>
@@ -1759,6 +2378,13 @@ function closeGelatoPopup() {
 }
 
 function toggleSupervisorMode() {
+    // Les MASTER ont accès automatique, pas de PIN
+    if (currentUser?.role === 'master') {
+        state.isSupervisor = !state.isSupervisor;
+        updateSupervisorButton();
+        showNotification(state.isSupervisor ? 'Mode Superviseur activé ✓' : 'Mode Employé activé');
+        return;
+    }
     if (state.isSupervisor) {
         state.isSupervisor = false;
         updateSupervisorButton();
@@ -1770,16 +2396,31 @@ function toggleSupervisorMode() {
     }
 }
 
+let _pinAttempts = 0;
+let _pinLockUntil = 0;
+
 function validateCode() {
+    if (Date.now() < _pinLockUntil) {
+        const secs = Math.ceil((_pinLockUntil - Date.now()) / 1000);
+        showNotification(`🔒 Trop de tentatives. Attendez ${secs}s`, true);
+        return;
+    }
     const code = document.getElementById('codeInput').value;
-    
     if (code === SUPERVISOR_CODE) {
+        _pinAttempts = 0;
         state.isSupervisor = true;
         updateSupervisorButton();
         document.getElementById('codePinPopup').classList.remove('active');
         showNotification('Mode Superviseur activé ✓');
     } else {
-        showNotification('❌ Code incorrect', true);
+        _pinAttempts++;
+        if (_pinAttempts >= 5) {
+            _pinLockUntil = Date.now() + 60000;
+            _pinAttempts = 0;
+            showNotification('🔒 5 tentatives échouées. Bloqué 60s', true);
+        } else {
+            showNotification(`❌ Code incorrect (${_pinAttempts}/5)`, true);
+        }
         document.getElementById('codeInput').value = '';
         document.getElementById('codeInput').focus();
     }
@@ -1815,6 +2456,8 @@ function switchTab(tabName) {
         content.classList.remove('active');
     });
     document.getElementById(`${tabName}-content`).classList.add('active');
+
+    if (tabName === 'equipe') renderEquipe();
 }
 
 function updateWeekDisplay() {
@@ -1960,7 +2603,7 @@ function renderLockEmpList(type) {
     }
     container.innerHTML = lockPending[type].map((emp, i) => `
         <span class="lock-emp-tag">
-            👤 ${emp.name} — ${formatDateFr(emp.date)}
+            👤 ${escHtml(emp.name)} — ${escHtml(formatDateFr(emp.date))}
             <span class="remove-emp" onclick="window.lockRemoveEmployee('${type}', ${i})">×</span>
         </span>
     `).join('');
@@ -2300,14 +2943,14 @@ function renderTempHistorique() {
     tempHistorique.forEach(e => {
         html += '<div class="temp-historique-card">';
         html += '<div class="temp-historique-header">';
-        html += '<span class="temp-historique-label">' + e.periode + ' — ' + e.date + '</span>';
-        html += '<span class="temp-historique-emp">👤 ' + e.employe + (e.horodatage ? ' · ' + e.horodatage : '') + '</span>';
+        html += '<span class="temp-historique-label">' + escHtml(e.periode) + ' — ' + escHtml(e.date) + '</span>';
+        html += '<span class="temp-historique-emp">👤 ' + escHtml(e.employe) + (e.horodatage ? ' · ' + escHtml(e.horodatage) : '') + '</span>';
         html += '</div>';
         e.releve.forEach(r => {
             if (r.valeur === null) return;
             html += '<div class="temp-historique-row ' + r.statut + '">';
-            html += '<span class="temp-historique-appareil">' + r.nom + '</span>';
-            html += '<span class="temp-historique-val ' + r.statut + '">' + r.valeur + '°C ' + (r.statut === 'danger' ? '🚨' : r.statut === 'warning' ? '⚠️' : '✅') + '</span>';
+            html += '<span class="temp-historique-appareil">' + escHtml(r.nom) + '</span>';
+            html += '<span class="temp-historique-val ' + r.statut + '">' + escHtml(String(r.valeur)) + '°C ' + (r.statut === 'danger' ? '🚨' : r.statut === 'warning' ? '⚠️' : '✅') + '</span>';
             html += '</div>';
         });
         html += '</div>';
@@ -2335,7 +2978,7 @@ async function init() {
     
     updateWeekDisplay();
     setupRealtimeSubscriptions();
-    setupDailyReset(); // Active le reset automatique à 4h00 AM
+    setupDailyReset();
     
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(tab.dataset.tab));
@@ -2353,6 +2996,16 @@ async function init() {
     document.getElementById('saveGelatoBtn').addEventListener('click', saveGelato);
     document.getElementById('cancelGelatoBtn').addEventListener('click', closeGelatoPopup);
 
+    // Login / Logout
+    document.getElementById('loginBtn').addEventListener('click', handleLogin);
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleLogin();
+    });
+    document.getElementById('loginUsername').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('loginPassword').focus();
+    });
+
     // Touche Enter sur les champs de lock
     ['ouverture', 'fermeture'].forEach(type => {
         document.getElementById(`${type}-lock-name`).addEventListener('keypress', (e) => {
@@ -2367,6 +3020,9 @@ async function init() {
     document.getElementById('codePinPopup').addEventListener('click', (e) => {
         if (e.target.id === 'codePinPopup') cancelCode();
     });
+
+    // Focus sur le champ username au démarrage
+    setTimeout(() => document.getElementById('loginUsername').focus(), 100);
 }
 
 window.toggleTask = toggleTask;
